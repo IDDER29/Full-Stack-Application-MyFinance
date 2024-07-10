@@ -11,4 +11,4 @@ const conectDB= async ()=>{
         console.log(error);
     }
 }
-console.log(conectDB);
+export default conectDB
