@@ -12,4 +12,4 @@ const UserSchema = new Schema({
     updatedAt:{type:Date,default:Date.now},
 },{timestamps:true});
 
-export default model("User",UserSchema)
+export const User = model("User",UserSchema)
