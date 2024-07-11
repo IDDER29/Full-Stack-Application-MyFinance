@@ -11,17 +11,20 @@ conectDB()
 const newUser = async (req, res) => {
     const { name, email, password } = req.body
     if (!name || !email || !password) {
-        return res.status(StatusCodes.BAD_REQUEST).json({error:"you have messed some fealeds please check all the fealdes"})
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: "you have messed some fealeds please check all the fealdes" })
+    }
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+        return res.status(StatusCodes.BAD_REQUEST).json({error:"this user allrady exists pleas change the email"})
     }
     const thepasseorde = hashPassword(password)
-    const user =  User.create({
+    const user = User.create({
         name,
         email,
-        password:thepasseorde
+        password: thepasseorde
     })
     const token = createtoken(user)
-    return res.status(StatusCodes.CREATED).json({token})
+    return res.status(StatusCodes.CREATED).json({ token })
 }
 
-
-const newUSer = async()
+export default newUser
