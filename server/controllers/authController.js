@@ -4,7 +4,7 @@ import { User } from '../models/User.js';
 
 const setTocken = (payload) => {
     return new Promise((resolve, reject) => {
-        jwt.sign(payload, "ac369bf6b37321dee151a1dd47532512819ed80c114bb5bb0f5636af0821a291", { expiresIn: 3600 }, (err, token) => {
+        jwt.sign(payload, process.env.Access_token, { expiresIn: 3600 }, (err, token) => {
             if (err) {
                 reject(err);
             } else {
