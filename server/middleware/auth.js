@@ -23,12 +23,12 @@ export const requireAuth = (req, res, next) => {
     // Verify token
     try {
         const token = authHeader.split(' ')[1]; // Split "Bearer <token>" to get the token part
-        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+        jwt.verify(token, process.env.Access_token, (err, decodedToken) => {
             if (err) {
                 return res.status(401).json({ message: 'Unauthorized access. Please authenticate.' });
             } else {
-                const { id, isAdmin } = decodedToken;
-                req.user = { id, isAdmin };
+                const { id } = decodedToken;
+                req.user = { id };
 
                 next();
             }

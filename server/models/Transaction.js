@@ -9,4 +9,4 @@ const transactionSchema = new Schema({
     Date: { type: Date, required: true }
 }, { timestamps: true })
 
-export const transaction = model("transaction", transactionSchema)
+export const transaction = model("Transaction", transactionSchema)

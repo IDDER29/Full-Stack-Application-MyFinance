@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
+import { Profile } from '../models/Profile.js';
 
 const setTocken = (payload) => {
     return new Promise((resolve, reject) => {
@@ -36,8 +37,18 @@ export const registerUser = async (req, res) => {
 
     await user.save();
 
+    // Create a profile with an empty object
+    const profile = new Profile({
+        username: name, // Default username
+        income: 0, // Default income
+        userId: user._id,
+    });
+
+    await profile.save();
+
     return res.status(201).json({ message: 'User created successfully' });
 };
+
 
 export const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -58,7 +69,8 @@ export const loginUser = async (req, res) => {
     };
     try {
         const token = await setTocken(payload);
-        res.setHeader("Authorization", `Bearer ${token}`);
+        res.setHeader("Authorization", `${token}`);
+
         res.status(200).json({ message: `Welcome back ${user.name}` });
     } catch (err) {
         res.status(500).json({ error: 'Error generating token' });

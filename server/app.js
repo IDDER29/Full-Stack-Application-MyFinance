@@ -1,7 +1,7 @@
 import express from 'express';
-import authRoutes from './routes/authRoutes.js';
-import connectDB from './config/db.js';
 import dotenv from 'dotenv';
+import authRoutes from './routes/authRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
 
 dotenv.config();
 
@@ -12,5 +12,6 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
 
 export default app;
