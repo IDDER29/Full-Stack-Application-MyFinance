@@ -3,8 +3,8 @@ import { User } from "../models/UserSchema";
 import createtoken from "../utils/jwt";
 import { StatusCodes } from "http-status-codes";
 import hashPassword from "../utils/hashPassWord"
-
 import conectDB from "../models/connection";
+import { setTocken } from "../middleware/authMiddleware";
 
 conectDB()
 
@@ -15,7 +15,7 @@ const newUser = async (req, res) => {
     }
     const userExists = await User.findOne({ email });
     if (userExists) {
-        return res.status(StatusCodes.BAD_REQUEST).json({error:"this user allrady exists pleas change the email"})
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: "this user allrady exists pleas change the email" })
     }
     const thepasseorde = hashPassword(password)
     const user = User.create({
@@ -27,4 +27,3 @@ const newUser = async (req, res) => {
     return res.status(StatusCodes.CREATED).json({ token })
 }
 
-export default newUser
