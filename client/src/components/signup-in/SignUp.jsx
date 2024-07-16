@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "./nav";
 import { useForm } from "react-hook-form";
 const FormRegistration = () => {
@@ -58,9 +59,9 @@ const FormRegistration = () => {
                             </form>
                             <p className="mt-6 text-xs text-[balck] text-center">
                                 Already have an account?{" "}
-                                <a href="">
+                                <Link to="/login">
                                     <span className="text-[#E9522C] font-semibold">Login</span>
-                                </a>
+                                </Link>
                             </p>
                         </div>
                     </div>
