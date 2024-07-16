@@ -42,7 +42,7 @@ const FormRegistration = () => {
                                     placeholder="Password"
                                 />
                                 {errors.password && <p className="text-red-500 text-sm sm:text-base md:text-lg p-0 sm:p-4 md:p-0 text-center">must be at least 8 letters</p>}
-                                <button className="mt-5 tracking-wide font-semibold bg-[#E9522C] text-gray-100 py-4 rounded-lg hover:bg-[#E9522C]/90 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none w-64 md:w-80 lg:w-96 xl:w-[28rem] mx-auto">
+                                <button className="mt-5 tracking-wide font-semibold bg-[#E9522C] text-gray-100 py-3 rounded-lg hover:bg-[#E9522C]/90 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none w-60 md:w-80 lg:w-96 xl:w-[28rem] mx-auto">
                                     <svg className="w-6 h-6 -ml-2"
                                         fill="none"
                                         stroke="currentColor"
