@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import Navbar from "./nav";
+import Navbar from "../Layout/nav";
 const FormLogin = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = (data) => {

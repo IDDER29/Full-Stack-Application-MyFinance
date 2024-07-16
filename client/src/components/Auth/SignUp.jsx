@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "./nav";
+import Navbar from "../Layout/nav";
 import { useForm } from "react-hook-form";
 const FormRegistration = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();

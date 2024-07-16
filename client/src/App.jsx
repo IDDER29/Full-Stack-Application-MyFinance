@@ -1,9 +1,8 @@
-import FormLogin from "./components/signup-in/LogeIn";
-import FormRegistration from "./components/signup-in/SignUp"
+import FormLogin from "./components/Auth/LogeIn";
+import FormRegistration from "./components/Auth/SignUp"
 import NotFound from "./components/notfound/notfound";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Statistic } from "./components/langing/States";
-import Landing from "./components/langing/Landing";
+import Landing from "./pages/Landing"
 
 function App() {
 
