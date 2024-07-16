@@ -1,0 +1,6 @@
+.hero{
+    background-image: url("../../../public/finance-definition.png");
+    background-size:cover;
+    background-repeat: no-repeat;
+    height: 20em;
+}

@@ -2,6 +2,7 @@ import FormLogin from "./pages/LogeIn";
 import FormRegistration from "./pages/SignUp";
 import NotFound from "./components/notfound/notfound";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing"
 
 function App() {
   return (
