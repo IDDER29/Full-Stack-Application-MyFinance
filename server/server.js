@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
-import app from './app.js';
 import connectDB from './config/db.js';
+import cron from 'node-cron';
+import app from './app.js';
+
+import { sendWeeklyNewsletter } from './middleware/newsletter.js';
 
 dotenv.config();
 
@@ -12,6 +15,14 @@ async function startServer() {
 
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
+            // Schedule the weekly newsletter to be sent every Monday at 9:00 AM
+            cron.schedule('0 9 * * 1', async () => {
+                try {
+                    await sendWeeklyNewsletter();
+                } catch (error) {
+                    console.error('Error in sending weekly newsletter:', error);
+                }
+            });
         });
     } catch (error) {
         console.error("Failed to start the server:", error.message);
