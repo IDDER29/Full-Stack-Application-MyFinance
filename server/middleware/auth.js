@@ -3,14 +3,6 @@ import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
-export const setTocken = (payload) => {
-    return jwt.sign(payload, "ac369bf6b37321dee151a1dd47532512819ed80c114bb5bb0f5636af0821a291", { expiresIn: '1h' }, (err, token) => {
-        if (err) throw err;
-
-    });
-
-};
-
 export const requireAuth = (req, res, next) => {
     // Get token from header
     const authHeader = req.headers['authorization'];

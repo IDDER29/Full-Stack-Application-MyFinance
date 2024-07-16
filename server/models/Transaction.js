@@ -1,12 +1,13 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
 
-const { Schema, model } = mongoose
-
-const transactionSchema = new Schema({
-    userName: { type: String, required: true },
+const transactionItemSchema = new Schema({
     name: { type: String, required: true },
-    amount: { type: String, required: true },
-    Date: { type: Date, required: true }
-}, { timestamps: true })
+    budget: { type: Number, required: true },
+    dateCreated: { type: Date, default: Date.now },
+    dateUpdated: { type: Date, default: Date.now },
+    amountAchieved: { type: Number, default: 0 },
+    profileId: { type: Schema.Types.ObjectId, ref: 'Profile', required: true },
+}, { timestamps: true });
 
-export const transaction = model("Transaction", transactionSchema)
+export const TransactionItem = model('TransactionItem', transactionItemSchema);
