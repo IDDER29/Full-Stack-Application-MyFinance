@@ -2,112 +2,75 @@ import React from 'react';
 import 'tailwindcss/tailwind.css';  // Ensure Tailwind CSS is imported
 import '@fortawesome/fontawesome-free/css/all.min.css';  // Ensure Font Awesome is imported if not already included in the project
 
+const user = {
+    name: 'John Doe',
+    bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod lacinia liberoat dignissim. Praesent euismod, libero eu tincidunt aliquam',
+    income: 0,
+    address: '123 Main St, Anytown, CA,12345',
+    phone: '(555) 555-5555',
+    preferences: {
+        "currency": "us",
+        "language": "en"
+    }
+}
+const alltransactions = [
+    {
+        name: "jon",
+        budget: 0,
+        dateCreated: 12345678,
+        dateUpdated: 123456789,
+        amountAchieved: 0
+    }
+]
 const ProfileSection = () => (
-    <section className="pt-16 bg-blueGray-50">
-        <div className="w-full lg:w-4/12 px-4 mx-auto">
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
-                <div className="px-6">
-                    <div className="flex flex-wrap justify-center">
-                        <div className="w-full px-4 flex justify-center">
-                            <div className="relative">
-                                <img
-                                    alt="Profile"
-                                    src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
-                                    className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
-                                />
-                            </div>
-                        </div>
-                        <div className="w-full px-4 text-center mt-20">
-                            <div className="flex justify-center py-4 lg:pt-4 pt-8">
-                                <div className="mr-4 p-3 text-center">
-                                    <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                                        22
-                                    </span>
-                                    <span className="text-sm text-blueGray-400">Friends</span>
+
+    <>
+        <div className="bg-white md:mx-auto rounded shadow-xl w-full md:w-1/2 overflow-hidden">
+            <div className="h-[140px] bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+            <div className="px-5 py-2 flex flex-col gap-3 pb-6">
+                <div className="h-[90px] shadow-md w-[90px] rounded-full border-4 overflow-hidden -mt-14 border-white">
+                    <img src="" alt="" />
+                </div>
+                <div>
+                    <h3 className="text-xl text-slate-900 relative font-bold leading-6">{user.name}</h3>
+                    <p className="text-sm text-gray-600">{user.income}</p>
+                </div>
+                <div className="flex gap-3 flex-wrap">
+                    <span className="rounded-sm bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">{user.address}</span>
+                    <span className="rounded-sm bg-green-100 px-3 py-1 text-xs font-medium text-green-800">{user.phone}</span>
+                    <span className="rounded-sm bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">{user.preferences.currency}</span>
+                    <span className="rounded-sm bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-800">{user.preferences.language}</span>
+                </div>
+                <div className="flex gap-2">
+                    <button type="button" className="inline-flex w-auto cursor-pointer select-none appearance-none items-center justify-center space-x-1 rounded border border-gray-200 bg-blue-700 px-3 py-2 text-sm font-medium text-white transition hover:border-blue-300 hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        modefi profile
+                    </button>
+                </div>
+                <h4 className="text-md font-medium leading-3">Bio</h4>
+                <p className="text-sm text-stone-500">{user.bio}</p>
+                <h4 className="text-md font-medium leading-3">items</h4>
+                <div className="flex flex-col gap-3">
+
+                    {alltransactions.map((e, i) => {
+                        return (
+                            <div className='flex items-center justify-between'>
+                            <div key={i} className="flex items-center gap-3 px-2 py-3 bg-white rounded border w-9/12 ">
+                                <div className="leading-3">
+                                    <p className="text-sm font-bold text-slate-700">{e.name}</p>
+                                    <span className="text-xs text-slate-600"> <b>Date of creation</b> {e.dateCreated}</span> <br/>
+                                    <span className="text-xs text-slate-600"> <b>Date of update</b> {e.dateUpdated}</span>
                                 </div>
-                                <div className="mr-4 p-3 text-center">
-                                    <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                                        10
-                                    </span>
-                                    <span className="text-sm text-blueGray-400">Photos</span>
-                                </div>
-                                <div className="lg:mr-4 p-3 text-center">
-                                    <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                                        89
-                                    </span>
-                                    <span className="text-sm text-blueGray-400">Comments</span>
-                                </div>
+                                <p className="text-sm text-slate-500  ml-auto self-center"><b>amountAchieved</b> {e.amountAchieved}</p>
                             </div>
-                        </div>
-                    </div>
-                    <div className="text-center mt-12">
-                        <h3 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700">
-                            Jenna Stones
-                        </h3>
-                        <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                            <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400" />
-                            Los Angeles, California
-                        </div>
-                        <div className="mb-2 text-blueGray-600 mt-10">
-                            <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400" />
-                            Solution Manager - Creative Tim Officer
-                        </div>
-                        <div className="mb-2 text-blueGray-600">
-                            <i className="fas fa-university mr-2 text-lg text-blueGray-400" />
-                            University of Computer Science
-                        </div>
-                    </div>
-                    <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                        <div className="flex flex-wrap justify-center">
-                            <div className="w-full lg:w-9/12 px-4">
-                                <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                                    An artist of considerable range, Jenna the name taken by
-                                    Melbourne-raised, Brooklyn-based Nick Murphy writes, performs
-                                    and records all of his own music, giving it a warm, intimate
-                                    feel with a solid groove structure. An artist of considerable
-                                    range.
-                                </p>
-                                <a
-                                    href="javascript:void(0);"
-                                    className="font-normal text-pink-500"
-                                >
-                                    Show more
-                                </a>
+                            <button type="button" class="focus:outline-none text-white w-16 px-1 py-2 bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">delete</button>
+                            <button type="button" class="focus:outline-none text-white w-16 px-1 py-2 bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-900">modefi</button>
                             </div>
-                        </div>
-                    </div>
+                        )
+                    })}
                 </div>
             </div>
         </div>
-        <footer className="relative  pt-8 pb-6 mt-8">
-            <div className="container mx-auto px-4">
-                <div className="flex flex-wrap items-center md:justify-between justify-center">
-                    <div className="w-full md:w-6/12 px-4 mx-auto text-center">
-                        <div className="text-sm text-blueGray-500 font-semibold py-1">
-                            Made with{" "}
-                            <a
-                                href="https://www.creative-tim.com/product/notus-js"
-                                className="text-blueGray-500 hover:text-gray-800"
-                                target="_blank"
-                            >
-                                Notus JS
-                            </a>{" "}
-                            by{" "}
-                            <a
-                                href="https://www.creative-tim.com"
-                                className="text-blueGray-500 hover:text-blueGray-800"
-                                target="_blank"
-                            >
-                                {" "}
-                                Creative Tim
-                            </a>
-                            .
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </section>
+    </>
 );
 
 export default ProfileSection;

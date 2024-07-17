@@ -4,6 +4,7 @@ import authRoutes from './routes/authRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
 import newsletterRoutes from './routes/newsletterRoutes.js';
+import cors from "cors"
 
 dotenv.config();
 
@@ -11,6 +12,11 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors(
+    {
+        origin: "*"
+    }
+));
 
 // Routes
 app.use('/api/auth', authRoutes);

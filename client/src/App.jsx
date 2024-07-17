@@ -8,7 +8,7 @@ import ProfileSection from "./pages/Profile";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<FormRegistration />}></Route>
           <Route path="/login" element={<FormLogin />}></Route>
@@ -17,8 +17,8 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
         </Routes>
-      </BrowserRouter>
-      
+      </BrowserRouter> */}
+      <ProfileSection/>
     </>
   );
 }
