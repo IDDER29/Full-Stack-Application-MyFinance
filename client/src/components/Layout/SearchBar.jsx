@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaBell, FaCaretDown } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,8 +11,9 @@ const SearchBar = () => {
   };
 
   return (
-    <header className="flex items-center justify-between bg-white p-4 shadow-md">
-      <div className="flex items-center w-1/2">
+    <header className="flex items-center justify-between bg-white p-4 shadow-md rounded-2xl">
+      <div className="flex items-center w-1/2 gap-2">
+        <IoSearch size={30} />
         <input
           type="text"
           placeholder="Hi Name, click here to search..."

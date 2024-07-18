@@ -1,5 +1,9 @@
 import React from "react";
 import { FaBolt, FaShoppingCart, FaHome, FaCar } from "react-icons/fa";
+import { FaSackDollar } from "react-icons/fa6";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 
 // Define a mapping between categories and icons
 const iconMap = {
@@ -25,7 +29,7 @@ const transactions = [
   { category: "Transport", remaining: 100, total: 600 },
 ];
 
-const TransactionItem = ({ transaction }) => {
+const TransactionItem = ({ transaction, open, setOpen }) => {
   const { category, remaining, total } = transaction;
   const bgColorClass = bgColorClassMap[category];
 
@@ -40,23 +44,44 @@ const TransactionItem = ({ transaction }) => {
           <div className="text-sm text-gray-500">la date de modif</div>
         </div>
       </div>
-      <div>
-        <div className="text-sm text-gray-500">
-          Il reste {remaining} MAD sur {total}
+      <div className="flex items-center gap-2">
+        <div>
+          {" "}
+          <FaSackDollar size={27} />
+        </div>
+
+        <div>
+          <div className="relative w-48 h-4 bg-gray-300 rounded">
+            <div
+              className="absolute top-0 left-0 h-4 bg-blue-500 rounded"
+              style={{ width: `${(remaining / total) * 100}%` }}
+            ></div>
+          </div>
+          <div className="text-sm text-gray-500">
+            Il reste {remaining} MAD sur {total}
+          </div>
         </div>
       </div>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+        onClick={() => setOpen(true)}
+      >
         Ajouter
       </button>
     </div>
   );
 };
 
-const TransactionItems = () => {
+const TransactionItems = ({ open, setOpen }) => {
   return (
     <div>
       {transactions.map((transaction, index) => (
-        <TransactionItem key={index} transaction={transaction} />
+        <TransactionItem
+          key={index}
+          transaction={transaction}
+          open={open}
+          setOpen={setOpen}
+        />
       ))}
     </div>
   );
