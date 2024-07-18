@@ -15,7 +15,7 @@ const NavbarA = () => {
         </Link>
         <Link to="/dashboard" className="text-white flex flex-col items-center">
           <FaChartPie size={24} />
-          <span className="text-sm mt-2">Tableau de bord</span>
+          <span className="text-sm mt-2">Dashboard</span>
         </Link>
         <Link to="/profile" className="text-white flex flex-col items-center">
           <FaUser size={24} />
