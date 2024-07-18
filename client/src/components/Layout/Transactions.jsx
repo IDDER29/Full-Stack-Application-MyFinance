@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBolt, FaShoppingCart, FaHome, FaCar } from "react-icons/fa";
+
 import TransactionItems from "./TransactionsItems";
 
 const Transactions = () => {
