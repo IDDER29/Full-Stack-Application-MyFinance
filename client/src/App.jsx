@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavbarA from "./components/Layout/NavA";
 import Home from "./pages/Home";
 
+import Landing from "./pages/Landing";
+
 function App() {
   return (
     <>
