@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/signup" element={<FormRegistration />}></Route>
           <Route path="/login" element={<FormLogin />}></Route>
-          <Route path="/ profile" element={<ProfileSection />}></Route>
+          <Route path="/profile" element={<ProfileSection />}></Route>
           <Route path="/" element={<Landing />}></Route>
           <Route path="*" element={<NotFound />} />
 
