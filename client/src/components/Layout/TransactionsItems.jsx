@@ -1,9 +1,12 @@
-import React from "react";
-import { FaBolt, FaShoppingCart, FaHome, FaCar } from "react-icons/fa";
+import React, { useState } from "react";
+import {
+  FaBolt,
+  FaShoppingCart,
+  FaHome,
+  FaCar,
+  FaCalendarAlt,
+} from "react-icons/fa";
 import { FaSackDollar } from "react-icons/fa6";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 
 // Define a mapping between categories and icons
 const iconMap = {
@@ -23,15 +26,37 @@ const bgColorClassMap = {
 
 // Sample transaction data
 const transactions = [
-  { category: "Utilitaires", remaining: 200, total: 500 },
-  { category: "Alimentation", remaining: 600, total: 700 },
-  { category: "Logement", remaining: 450, total: 900 },
-  { category: "Transport", remaining: 100, total: 600 },
+  {
+    category: "Utilitaires",
+    remaining: 200,
+    total: 500,
+    lastUpdate: "01/07/2024",
+  },
+  {
+    category: "Alimentation",
+    remaining: 100,
+    total: 700,
+    lastUpdate: "15/07/2024",
+  },
+  {
+    category: "Logement",
+    remaining: 450,
+    total: 900,
+    lastUpdate: "10/07/2024",
+  },
+  {
+    category: "Transport",
+    remaining: 100,
+    total: 600,
+    lastUpdate: "20/07/2024",
+  },
 ];
 
 const TransactionItem = ({ transaction, open, setOpen }) => {
-  const { category, remaining, total } = transaction;
+  const { category, remaining, total, lastUpdate } = transaction;
   const bgColorClass = bgColorClassMap[category];
+  const filledAmount = total - remaining;
+  const fillPercentage = (filledAmount / total) * 100;
 
   return (
     <div className="flex justify-between items-center mb-4">
@@ -41,20 +66,20 @@ const TransactionItem = ({ transaction, open, setOpen }) => {
         </div>
         <div>
           <div>{category}</div>
-          <div className="text-sm text-gray-500">la date de modif</div>
+          <div className="flex items-center text-sm text-gray-500">
+            <FaCalendarAlt className="mr-1" /> {lastUpdate}
+          </div>
         </div>
       </div>
       <div className="flex items-center gap-2">
         <div>
-          {" "}
           <FaSackDollar size={27} />
         </div>
-
         <div>
           <div className="relative w-48 h-4 bg-gray-300 rounded">
             <div
-              className="absolute top-0 left-0 h-4 bg-blue-500 rounded"
-              style={{ width: `${(remaining / total) * 100}%` }}
+              className={`absolute top-0 left-0 h-4 ${bgColorClass} rounded`}
+              style={{ width: `${fillPercentage}%` }}
             ></div>
           </div>
           <div className="text-sm text-gray-500">
