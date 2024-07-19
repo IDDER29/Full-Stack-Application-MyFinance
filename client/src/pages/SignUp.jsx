@@ -9,9 +9,11 @@ const FormRegistration = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-    const res = axios.post() 
+    const res = await axios.post("http://localhost:8088/api/auth/register",data)
+    console.log(res.data); 
+    localStorage.setItem("token",JSON.stringify(res.data.token))
     };
 
   return (

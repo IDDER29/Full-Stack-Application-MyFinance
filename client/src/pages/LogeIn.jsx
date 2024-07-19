@@ -7,8 +7,15 @@ const FormLogin = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    const res = await axios.post("http://localhost:8088/api/auth/login",data,{
+      headers: {
+        Authorization: `Bearer ${message}`
+      }
+    })
+    console.log(res.data); 
+    localStorage.setItem("token",JSON.stringify(res.data.message))
   };
   return (
     <>

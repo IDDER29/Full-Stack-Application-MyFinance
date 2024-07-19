@@ -20,7 +20,7 @@ const Navbar = () => {
     ];
 
     return (
-        <div className='bg-[#F2EAD5] flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-black'>
+        <div className='bg-[#F2EAD5] flex justify-between items-center h-24  mx-auto px-4 text-black'>
             {/* Logo */}
             <img src="folousi-yanas-high-resolution-logo-removebg-preview.png" alt="" className='w-20' />
 
