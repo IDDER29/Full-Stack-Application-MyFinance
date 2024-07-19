@@ -9,8 +9,10 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useDashboardContext } from "../../../contexts/DashboardContext";
 
-const EarningsCostsChart = ({ data, showEarnings, showCosts }) => {
+const EarningsCostsChart = ({ showEarnings, showCosts }) => {
+  const { chartData: data } = useDashboardContext();
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart

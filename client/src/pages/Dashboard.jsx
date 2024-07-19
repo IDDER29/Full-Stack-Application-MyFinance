@@ -5,31 +5,17 @@ import IncomeSourcesCard from "../components/Dashboard/Charts/IncomeSourcesCard"
 import EarningsCostsCard from "../components/Dashboard/Charts/EarningsCostsCard";
 import IncomeProgressCard from "../components/Dashboard/Charts/IncomeProgressCard";
 import FinancialOverviewCard from "../components/Dashboard/Charts/FinancialOverviewCard";
-import { DashboardContext } from "../contexts/DashboardContext";
+import { DashboardProvider } from "../contexts/DashboardContext";
 
 const Dashboard = () => {
-  const currentIncome = 5500; // Example data
-  const goalIncome = 10000; // Example data
-  const totalCosts = 3000; // Example data
-  const totalIncome = 5500; // Example data
-  const remainingAmount = totalIncome - totalCosts; // Example calculation
-
   return (
     <div className="min-h-screen bg-gray-100 flex p-4">
-      <DashboardContext.Provider
-        value={{
-          currentIncome: currentIncome,
-          goalIncome: goalIncome,
-          costs: totalCosts,
-          income: totalIncome,
-          remaining: remainingAmount,
-        }}
-      >
+      <DashboardProvider>
         {/* Sidebar */}
         <NavbarA />
 
         {/* Main Content */}
-        <div className="w-full flex flex-col p-4 gap-4 ">
+        <div className="w-full flex flex-col p-4 gap-4">
           {/* Top Bar with Search */}
           <SearchBar />
 
@@ -56,7 +42,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </DashboardContext.Provider>
+      </DashboardProvider>
     </div>
   );
 };

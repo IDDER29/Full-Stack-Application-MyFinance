@@ -9,33 +9,14 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
-const expenseData = [
-  {
-    month: "January",
-    Utilitaires: 400,
-    Alimentation: 300,
-    Logement: 300,
-    Autres: 200,
-    Economiser: 100,
-  },
-  {
-    month: "February",
-    Utilitaires: 500,
-    Alimentation: 400,
-    Logement: 300,
-    Autres: 200,
-    Economiser: 150,
-  },
-
-  // Add more data as needed
-];
+import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const ExpenditureChart = () => {
+  const { expenseDataM } = useDashboardContext();
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart
-        data={expenseData}
+        data={expenseDataM}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
         <CartesianGrid strokeDasharray="3 3" />

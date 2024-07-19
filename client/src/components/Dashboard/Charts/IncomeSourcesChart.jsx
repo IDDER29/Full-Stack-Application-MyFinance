@@ -1,16 +1,9 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-
-const incomeData = [
-  { source: "Salary", amount: 3000 },
-  { source: "Freelance", amount: 1500 },
-  { source: "Investments", amount: 700 },
-  { source: "Other", amount: 300 },
-];
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const IncomeSourcesChart = () => {
+  const { incomeData, colors } = useDashboardContext();
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
@@ -24,7 +17,7 @@ const IncomeSourcesChart = () => {
           label
         >
           {incomeData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
           ))}
         </Pie>
         <Tooltip />

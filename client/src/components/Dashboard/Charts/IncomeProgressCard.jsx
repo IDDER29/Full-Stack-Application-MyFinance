@@ -1,8 +1,11 @@
 import React, { useContext } from "react";
-import { DashboardContext } from "../../../contexts/DashboardContext";
+import {
+  DashboardContext,
+  useDashboardContext,
+} from "../../../contexts/DashboardContext";
 
 const IncomeProgressCard = () => {
-  const { currentIncome, goalIncome } = useContext(DashboardContext);
+  const { currentIncome, goalIncome } = useDashboardContext();
   const progressPercentage = (currentIncome / goalIncome) * 100;
 
   return (

@@ -9,7 +9,7 @@ const NavbarA = () => {
         <img src="./logo.png" alt="Logo" className="w-12 h-12" />
       </div>
       <nav className="flex flex-col space-y-10">
-        <Link to="/" className="text-white flex flex-col items-center">
+        <Link to="/home" className="text-white flex flex-col items-center">
           <FaHome size={24} />
           <span className="text-sm mt-2">Accueil</span>
         </Link>

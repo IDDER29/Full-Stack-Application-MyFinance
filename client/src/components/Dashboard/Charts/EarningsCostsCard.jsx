@@ -1,15 +1,6 @@
 import React, { useState } from "react";
 import EarningsCostsChart from "./EarningsCostsChart";
-
-// Sample data for the earnings and costs chart
-const chartData = [
-  { month: "January", earnings: 4000, costs: 2400 },
-  { month: "February", earnings: 3000, costs: 1398 },
-  { month: "March", earnings: 2000, costs: 9800 },
-  { month: "April", earnings: 2780, costs: 3908 },
-  { month: "May", earnings: 1890, costs: 4800 },
-  { month: "June", earnings: 2390, costs: 3800 },
-];
+import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const EarningsCostsCard = () => {
   const [showEarnings, setShowEarnings] = useState(true);
@@ -40,11 +31,7 @@ const EarningsCostsCard = () => {
           </button>
         </div>
       </div>
-      <EarningsCostsChart
-        data={chartData}
-        showEarnings={showEarnings}
-        showCosts={showCosts}
-      />
+      <EarningsCostsChart showEarnings={showEarnings} showCosts={showCosts} />
     </div>
   );
 };
