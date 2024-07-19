@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import { DashboardContext } from "../../../contexts/DashboardContext";
 
-const FinancialOverviewCard = ({ costs, income, remaining }) => {
+const FinancialOverviewCard = () => {
+  const { costs, income, remaining } = useContext(DashboardContext);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-6 rounded-lg shadow-lg mb-4 w-full">
       <div className="text-center">
