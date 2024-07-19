@@ -10,6 +10,7 @@ const FormRegistration = () => {
 
   const onSubmit = (data) => {
     console.log(data);
+    const res = axios
   };
 
   return (

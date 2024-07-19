@@ -3,6 +3,7 @@ import 'tailwindcss/tailwind.css';  // Ensure Tailwind CSS is imported
 import '@fortawesome/fontawesome-free/css/all.min.css';  // Ensure Font Awesome is imported if not already included in the project
 import ModalForm from '../components/Layout/ModalForm';
 import Footer from '../components/Layout/Footer';
+import LogedNav from '../components/Layout/LogedNav';
 // import { useState } from 'react';
 
 
@@ -52,6 +53,7 @@ const ProfileSection = () => {
 
     return (
         <>
+        <LogedNav/>
         <div className="bg-gray-100">
             <div className="container mx-auto py-8">
                 <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
