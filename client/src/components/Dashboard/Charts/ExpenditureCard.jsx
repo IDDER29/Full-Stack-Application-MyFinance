@@ -1,3 +1,5 @@
+// components/Dashboard/Charts/ExpenditureCard.js
+
 import React from "react";
 import ExpenditureChart from "./ExpenditureChart";
 import { useDashboardContext } from "../../../contexts/DashboardContext";

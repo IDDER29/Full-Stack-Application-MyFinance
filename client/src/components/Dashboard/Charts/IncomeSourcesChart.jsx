@@ -1,9 +1,12 @@
+// components/Dashboard/Charts/IncomeSourcesChart.js
+
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const IncomeSourcesChart = () => {
   const { incomeData, colors } = useDashboardContext();
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>

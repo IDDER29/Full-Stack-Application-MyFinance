@@ -1,4 +1,7 @@
-import { createContext, useContext } from "react";
+// contexts/DashboardContext.js
+
+import { createContext, useContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 export const DashboardContext = createContext();
 
@@ -13,90 +16,169 @@ export function useDashboardContext() {
 }
 
 export function DashboardProvider({ children }) {
-  const currentIncome = 5500; // Example data
-  const goalIncome = 10000; // Example data
-  const totalCosts = 3000; // Example data
-  const totalIncome = 5500; // Example data
-  const remainingAmount = totalIncome - totalCosts; // Example calculation
+  const [profile, setProfile] = useState({
+    name: "John Doe",
+    monthlySalary: 3000,
+    otherIncome: [
+      { source: "Freelance", amount: 500 },
+      { source: "Investments", amount: 200 },
+    ],
+  });
 
-  // Sample data for the expense chart
+  const [transactions, setTransactions] = useState([]);
 
-  const expenseData = [
-    { category: "Utilitaires", amount: 500, color: "bg-red-500" },
-    { category: "Alimentation", amount: 250, color: "bg-blue-500" },
-    { category: "Logement", amount: 250, color: "bg-green-500" },
-    { category: "Autres", amount: 300, color: "bg-yellow-500" },
-    { category: "Economiser", amount: 250, color: "bg-purple-500" },
-  ];
+  useEffect(() => {
+    // Simulate a server fetch with sample data
+    const fetchData = async () => {
+      const sampleTransactions = [
+        {
+          id: 1,
+          date: "2024-07-01",
+          category: "Utilities",
+          amount: 100,
+          type: "expense",
+        },
+        {
+          id: 2,
+          date: "2024-07-03",
+          category: "Groceries",
+          amount: 150,
+          type: "expense",
+        },
+        {
+          id: 3,
+          date: "2024-07-05",
+          category: "Rent",
+          amount: 800,
+          type: "expense",
+        },
+        {
+          id: 4,
+          date: "2024-07-10",
+          category: "Salary",
+          amount: 3000,
+          type: "income",
+        },
+        {
+          id: 5,
+          date: "2024-07-15",
+          category: "Freelance",
+          amount: 500,
+          type: "income",
+        },
+        {
+          id: 6,
+          date: "2024-07-20",
+          category: "Investments",
+          amount: 200,
+          type: "income",
+        },
+      ];
+      setTransactions(sampleTransactions);
+    };
 
-  /// Sample data for the income chart
+    fetchData();
+  }, []);
 
-  const totalAmount = expenseData.reduce((acc, curr) => acc + curr.amount, 0);
-  const goalAmount = 5000;
-  const consumedAmount = totalAmount;
+  const totalIncome = transactions
+    .filter((t) => t.type === "income")
+    .reduce((acc, curr) => acc + curr.amount, 0);
+  const totalExpenses = transactions
+    .filter((t) => t.type === "expense")
+    .reduce((acc, curr) => acc + curr.amount, 0);
+  const remainingAmount = totalIncome - totalExpenses;
 
-  // expenseData by monts
+  const expenseData = transactions
+    .filter((t) => t.type === "expense")
+    .map((t) => ({
+      category: t.category,
+      amount: t.amount,
+      color: getColorByCategory(t.category),
+    }));
 
-  const expenseDataM = [
-    {
-      month: "January",
-      Utilitaires: 400,
-      Alimentation: 300,
-      Logement: 300,
-      Autres: 200,
-      Economiser: 100,
-    },
-    {
-      month: "February",
-      Utilitaires: 500,
-      Alimentation: 400,
-      Logement: 300,
-      Autres: 200,
-      Economiser: 150,
-    },
+  const incomeData = transactions
+    .filter((t) => t.type === "income")
+    .map((t) => ({
+      category: t.category,
+      amount: t.amount,
+    }));
 
-    // Add more data as needed
-  ];
+  const expenseDataByMonth = getMonthlyData(transactions, "expense");
+  const incomeDataByMonth = getMonthlyData(transactions, "income");
 
-  // Sample data for the income chart
-  const incomeData = [
-    { source: "Salary", amount: 3000 },
-    { source: "Freelance", amount: 1500 },
-    { source: "Investments", amount: 700 },
-    { source: "Other", amount: 300 },
-  ];
+  const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
 
-  // Sample data for the earnings and costs chart
-  const chartData = [
-    { month: "January", earnings: 4000, costs: 2400 },
-    { month: "February", earnings: 3000, costs: 1398 },
-    { month: "March", earnings: 2000, costs: 9800 },
-    { month: "April", earnings: 2780, costs: 3908 },
-    { month: "May", earnings: 1890, costs: 4800 },
-    { month: "June", earnings: 2390, costs: 3800 },
-  ];
+  const goalAmount = 2000;
+  const consumedAmount = totalExpenses;
 
-  let colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  function getColorByCategory(category) {
+    const colors = {
+      Utilities: "bg-red-500",
+      Groceries: "bg-blue-500",
+      Rent: "bg-green-500",
+      Others: "bg-yellow-500",
+      Savings: "bg-purple-500",
+    };
+    return colors[category] || "bg-gray-500";
+  }
+
+  function getMonthlyData(transactions, type) {
+    const data = transactions.filter((t) => t.type === type);
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const categories = ["Utilities", "Groceries", "Rent", "Others", "Savings"];
+
+    return months.map((month) => {
+      const monthlyData = { month };
+      categories.forEach((category) => {
+        monthlyData[category] = data
+          .filter(
+            (t) =>
+              new Date(t.date).toLocaleString("default", { month: "long" }) ===
+                month && t.category === category
+          )
+          .reduce((acc, curr) => acc + curr.amount, 0);
+      });
+      return monthlyData;
+    });
+  }
 
   return (
     <DashboardContext.Provider
       value={{
-        currentIncome: currentIncome,
-        goalIncome: goalIncome,
-        costs: totalCosts,
-        income: totalIncome,
-        remaining: remainingAmount,
+        profile,
+        setProfile,
+        transactions,
+        setTransactions,
+        totalIncome,
+        totalExpenses,
+        remainingAmount,
         expenseData,
-        totalAmount,
+        incomeData,
+        expenseDataByMonth,
+        incomeDataByMonth,
+        colors,
         goalAmount,
         consumedAmount,
-        expenseDataM,
-        incomeData,
-        chartData,
-        colors,
       }}
     >
       {children}
     </DashboardContext.Provider>
   );
 }
+
+DashboardProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

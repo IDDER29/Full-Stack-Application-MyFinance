@@ -1,3 +1,5 @@
+// components/Dashboard/Charts/EarningsCostsChart.js
+
 import React from "react";
 import {
   LineChart,
@@ -12,7 +14,23 @@ import {
 import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const EarningsCostsChart = ({ showEarnings, showCosts }) => {
-  const { chartData: data } = useDashboardContext();
+  const { transactions } = useDashboardContext();
+
+  const monthlyData = transactions.reduce((acc, transaction) => {
+    const month = new Date(transaction.date).toLocaleString("default", {
+      month: "short",
+    });
+    if (!acc[month]) acc[month] = { month, earnings: 0, costs: 0 };
+    if (transaction.type === "income") {
+      acc[month].earnings += transaction.amount;
+    } else {
+      acc[month].costs += transaction.amount;
+    }
+    return acc;
+  }, {});
+
+  const data = Object.values(monthlyData);
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart

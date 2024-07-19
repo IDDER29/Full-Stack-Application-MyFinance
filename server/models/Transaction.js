@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 const transactionItemSchema = new Schema({
-    name: { type: String, required: true },
+    title: { type: String, required: true },
+    category: { type: String, required: true },
     budget: { type: Number, required: true },
     dateCreated: { type: Date, default: Date.now },
     dateUpdated: { type: Date, default: Date.now },

@@ -1,11 +1,15 @@
-import React, { useContext } from "react";
-import {
-  DashboardContext,
-  useDashboardContext,
-} from "../../../contexts/DashboardContext";
+// components/Dashboard/Charts/IncomeProgressCard.js
+
+import React from "react";
+import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const IncomeProgressCard = () => {
-  const { currentIncome, goalIncome } = useDashboardContext();
+  const { transactions } = useDashboardContext();
+  const currentIncome = transactions
+    .filter((t) => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
+  const goalIncome = 5000; // assuming a fixed goal for this example
+
   const progressPercentage = (currentIncome / goalIncome) * 100;
 
   return (

@@ -1,3 +1,5 @@
+// components/Dashboard/Charts/IncomeSourcesCard.js
+
 import React from "react";
 import IncomeSourcesChart from "./IncomeSourcesChart";
 
