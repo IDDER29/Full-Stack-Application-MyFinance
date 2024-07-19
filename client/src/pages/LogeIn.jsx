@@ -2,9 +2,20 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Navbar from "../components/Layout/nav";
 const FormLogin = () => {
-  const { register, handleSubmit, formState: { errors }, } = useForm();
-  const onSubmit = (data) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = async (data) => {
     console.log(data);
+    const res = await axios.post("http://localhost:8088/api/auth/login", data, {
+      headers: {
+        Authorization: `Bearer ${message}`,
+      },
+    });
+    console.log(res.data);
+    localStorage.setItem("token", JSON.stringify(res.data.message));
   };
   return (
     <>
@@ -24,11 +35,11 @@ const FormLogin = () => {
               <div className="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
                 <input
                   {...register("email", {
-                    required: "Email is required",  // Adding a custom message
+                    required: "Email is required", // Adding a custom message
                     pattern: {
                       value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                      message: "Invalid email address"  // Adding a custom message for pattern validation
-                    }
+                      message: "Invalid email address", // Adding a custom message for pattern validation
+                    },
                   })}
                   className={`w-full px-5 py-3 rounded-lg font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2 focus:outline`}
                   type="email"

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Layout/nav";
 import { useForm } from "react-hook-form";
+import axios from "axios"
 const FormRegistration = () => {
   const {
     register,
@@ -8,9 +9,12 @@ const FormRegistration = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-  };
+    const res = await axios.post("http://localhost:8088/api/auth/register",data)
+    console.log(res.data); 
+    localStorage.setItem("token",JSON.stringify(res.data.token))
+    };
 
   return (
     <>
