@@ -2,10 +2,9 @@ import FormLogin from "./pages/LogeIn";
 import FormRegistration from "./pages/SignUp";
 import NotFound from "./components/notfound/notfound";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import NavbarA from "./components/Layout/NavA";
 import Home from "./pages/Home";
 
-import Landing from "./pages/Landing";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -14,7 +13,8 @@ function App() {
         <Routes>
           <Route path="/signup" element={<FormRegistration />}></Route>
           <Route path="/login" element={<FormLogin />}></Route>
-          <Route path="/home" element={<Home />}></Route>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
