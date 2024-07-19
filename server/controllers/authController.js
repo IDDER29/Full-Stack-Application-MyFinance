@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
 import { Profile } from '../models/Profile.js';
+import createtoken from '../utils/jwt.js';
 
 const setTocken = (payload) => {
     return new Promise((resolve, reject) => {
@@ -46,7 +47,9 @@ export const registerUser = async (req, res) => {
 
     await profile.save();
 
-    return res.status(201).json({ message: 'User created successfully' });
+    const token = createtoken(user)
+
+    return res.status(201).json({ message: token });
 };
 
 

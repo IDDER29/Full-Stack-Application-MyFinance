@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Layout/nav";
 import { useForm } from "react-hook-form";
+import axios from "axios"
 const FormRegistration = () => {
   const {
     register,
@@ -10,8 +11,8 @@ const FormRegistration = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    const res = axios
-  };
+    const res = axios.post() 
+    };
 
   return (
     <>
