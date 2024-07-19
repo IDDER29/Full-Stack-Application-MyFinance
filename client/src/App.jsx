@@ -2,20 +2,22 @@ import FormLogin from "./pages/LogeIn";
 import FormRegistration from "./pages/SignUp";
 import NotFound from "./components/notfound/notfound";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "./pages/Landing";
+import Home from "./pages/Home";
+
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <>
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<FormRegistration />}></Route>
           <Route path="/login" element={<FormLogin />}></Route>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="*" element={<NotFound />} />
-
         </Routes>
-      </BrowserRouter> */}
-      <ProfileSection />
+      </BrowserRouter>
     </>
   );
 }
