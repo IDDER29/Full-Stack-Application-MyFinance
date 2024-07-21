@@ -3,7 +3,7 @@ import ExpenditureChart from "./ExpenditureChart";
 import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const ExpenditureCard = () => {
-  const { goalAmount, consumedAmount } = useDashboardContext();
+  const { income, totalCosts } = useDashboardContext();
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -15,8 +15,8 @@ const ExpenditureCard = () => {
       </p>
       <div className="flex flex-col items-center">
         <ExpenditureChart />
-        <div className="text-2xl font-bold mt-4">{`Consommé: $${consumedAmount}`}</div>
-        <div className="text-center text-gray-500 mb-4">{`Sur: $${goalAmount}`}</div>
+        <div className="text-2xl font-bold mt-4">{`Consommé: $${totalCosts}`}</div>
+        <div className="text-center text-gray-500 mb-4">{`Sur: $${income}`}</div>
       </div>
     </div>
   );

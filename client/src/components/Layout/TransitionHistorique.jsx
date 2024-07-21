@@ -2,14 +2,20 @@ import React, { useState } from "react";
 import TransactionItem from "./TransactionItemH";
 import EditTransactionModal from "./EditTransactionModal";
 import DeleteTransactionModal from "./DeleteTransactionModal";
-import { initialTransactions } from "./data";
+//import { initialTransactions } from "./data";
 import "../../assets/styles/menu-container.css";
+import { useHomeContext } from "../../contexts/HomeContext";
 
 const TransitionHistorique = () => {
-  const [transactions, setTransactions] = useState(initialTransactions);
+  const {
+    transactions,
+    setTransactions,
+    historicTransactions,
+    setHistoricTransactions,
+  } = useHomeContext();
+  const { currentTransaction, setCurrentTransaction } = useHomeContext();
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [currentTransaction, setCurrentTransaction] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
 
   const handleEdit = (transaction) => {
@@ -40,7 +46,7 @@ const TransitionHistorique = () => {
     <div className="bg-white p-6 rounded-lg shadow-lg flex-1">
       <h2 className="text-xl font-bold mb-4">Historique des transitions</h2>
       <div>
-        {transactions.map((transaction, index) => (
+        {historicTransactions.map((transaction, index) => (
           <TransactionItem
             key={index}
             transaction={transaction}

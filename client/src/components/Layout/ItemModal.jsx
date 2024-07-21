@@ -1,13 +1,39 @@
 import React, { useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { useHomeContext } from "../../contexts/HomeContext";
+import { set } from "react-hook-form";
 
 export default function Modal({ open, setOpen }) {
+  const {
+    transactions,
+    setTransactions,
+    currentTransaction,
+    setCurrentTransaction,
+    historicTransactions,
+    setHistoricTransactions,
+  } = useHomeContext();
   const [amount, setAmount] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [actionToConfirm, setActionToConfirm] = useState(null); // 'confirm' or 'cancel'
 
   // Function to handle the final confirmation
   const handleFinalConfirm = () => {
+    const updatedTransactions = transactions.map((transaction) => {
+      if (transaction === currentTransaction) {
+        setCurrentTransaction(null);
+        setHistoricTransactions([
+          ...historicTransactions,
+          { ...transaction, transactionAmount: amount },
+        ]);
+        return {
+          ...transaction,
+          consumption: transaction.consumption + parseInt(amount),
+        };
+      }
+      return transaction;
+    });
+    setTransactions(updatedTransactions);
+
     setOpen(false);
     setShowConfirmModal(false);
   };

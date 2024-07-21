@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useHomeContext } from "../../contexts/HomeContext";
 
-const EditTransactionModal = ({ transaction, onSave, onClose }) => {
-  const [editedTransaction, setEditedTransaction] = useState(transaction);
+const EditTransactionModal = ({ onSave, onClose }) => {
+  const { iconMap, bgColorClassMap, currentTransaction } = useHomeContext();
+  const [editedTransaction, setEditedTransaction] =
+    useState(currentTransaction);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -1,37 +1,13 @@
 import React, { useState } from "react";
 import TransactionItems from "./TransactionsItems";
 import Example from "./NewCategoryItem";
+import { useHomeContext } from "../../contexts/HomeContext";
 
 const Transactions = ({ open, setOpen }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { transactions } = useHomeContext();
 
-  const categories = ["All", "Necessaire", "Digital", "Autres"];
-  const transactions = [
-    {
-      category: "Necessaire",
-      remaining: 200,
-      total: 500,
-      lastUpdate: "01/07/2024",
-    },
-    {
-      category: "Digital",
-      remaining: 600,
-      total: 700,
-      lastUpdate: "15/07/2024",
-    },
-    {
-      category: "Necessaire",
-      remaining: 450,
-      total: 900,
-      lastUpdate: "10/07/2024",
-    },
-    {
-      category: "Autres",
-      remaining: 100,
-      total: 600,
-      lastUpdate: "20/07/2024",
-    },
-  ];
+  const categories = transactions.map((transaction) => transaction.category);
 
   const filteredTransactions =
     selectedCategory === "All"

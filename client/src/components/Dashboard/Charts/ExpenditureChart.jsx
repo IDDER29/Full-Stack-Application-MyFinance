@@ -12,11 +12,11 @@ import {
 import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const ExpenditureChart = () => {
-  const { expenseDataM } = useDashboardContext();
+  const { expenseDatabyMonth } = useDashboardContext();
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart
-        data={expenseDataM}
+        data={expenseDatabyMonth}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
         <CartesianGrid strokeDasharray="3 3" />

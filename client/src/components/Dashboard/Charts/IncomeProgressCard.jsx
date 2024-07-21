@@ -5,8 +5,8 @@ import {
 } from "../../../contexts/DashboardContext";
 
 const IncomeProgressCard = () => {
-  const { currentIncome, goalIncome } = useDashboardContext();
-  const progressPercentage = (currentIncome / goalIncome) * 100;
+  const { income, goalIncome } = useDashboardContext();
+  const progressPercentage = (income / goalIncome) * 100;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg mb-4 w-full">
@@ -18,7 +18,7 @@ const IncomeProgressCard = () => {
         ></div>
       </div>
       <div className="text-center mt-2">
-        <span className="font-bold">{currentIncome}$</span> / {goalIncome}$
+        <span className="font-bold">{income}$</span> / {goalIncome}$
       </div>
     </div>
   );

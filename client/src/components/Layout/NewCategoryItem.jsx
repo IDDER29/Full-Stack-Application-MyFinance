@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { useHomeContext } from "../../contexts/HomeContext";
 
 const defaultIcon = <CurrencyDollarIcon className="h-6 w-6 text-yellow-500" />;
 
@@ -16,40 +17,14 @@ export default function Example() {
   const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
   const [actionToConfirm, setActionToConfirm] = useState(null); // 'cancel' or 'add'
   const [categories, setCategories] = useState(initialCategories);
-  const [transactions, setTransactions] = useState([
-    {
-      category: "Utilitaires",
-      remaining: 200,
-      total: 500,
-      title: "Utility Bill",
-      image: null,
-    },
-    {
-      category: "Alimentation",
-      remaining: 600,
-      total: 700,
-      title: "Groceries",
-      image: null,
-    },
-    {
-      category: "Logement",
-      remaining: 450,
-      total: 900,
-      title: "Rent",
-      image: null,
-    },
-    {
-      category: "Transport",
-      remaining: 100,
-      total: 600,
-      title: "Transport",
-      image: null,
-    },
-  ]);
+  const { transactions, setTransactions } = useHomeContext();
 
   const [newTransaction, setNewTransaction] = useState({
     category: "",
+    consumption: 0,
     budget: "",
+    dateOfCreation: "01/07/2024",
+    lastUpdate: "11/07/2024",
     title: "",
     image: "",
   });
@@ -59,7 +34,7 @@ export default function Example() {
   const validateForm = () => {
     return (
       newTransaction.category.trim() !== "" &&
-      newTransaction.budget.trim() !== "" &&
+      newTransaction.budget !== "" &&
       newTransaction.title.trim() !== ""
     );
   };
@@ -70,9 +45,10 @@ export default function Example() {
         alert("Please fill in all required fields.");
         return;
       }
+
       setTransactions([...transactions, newTransaction]);
-      setShowNewTransactionModal(false);
       alert(`New transaction created: ${JSON.stringify(newTransaction)}`);
+      setShowNewTransactionModal(false);
     } else if (actionToConfirm === "cancel") {
       setShowNewTransactionModal(false);
     }
@@ -89,7 +65,6 @@ export default function Example() {
     setNewCategory("");
     setShowNewCategoryModal(false);
   };
-
   return (
     <>
       <button
@@ -176,7 +151,7 @@ export default function Example() {
                   onChange={(e) =>
                     setNewTransaction({
                       ...newTransaction,
-                      budget: e.target.value,
+                      budget: Number(e.target.value),
                     })
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
