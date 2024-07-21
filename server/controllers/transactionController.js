@@ -1,5 +1,5 @@
 import { validationResult } from 'express-validator';
-import { TransactionItem } from '../models/Transaction.js';
+import { Transaction } from '../models/Transaction.js';
 import { Profile } from '../models/Profile.js';
 
 // Helper function for handling validation errors
@@ -10,106 +10,182 @@ const handleValidationErrors = (req, res) => {
     }
 };
 
-// Add a new transaction item
-export const addTransactionItem = async (req, res) => {
+// Helper function for finding a profile by user ID
+const findProfileByUserId = async (userId) => {
+    return await Profile.findOne({ userId });
+};
+
+// Add a new transaction
+export const addTransaction = async (req, res) => {
     handleValidationErrors(req, res);
 
-    const { name, budget, amountAchieved } = req.body;
+    const { title, category, budget, image } = req.body;
     const { id: userId } = req.user;
 
     try {
-        const profile = await Profile.findOne({ userId });
+        const profile = await findProfileByUserId(userId);
         if (!profile) {
             return res.status(404).json({ msg: 'Profile not found' });
         }
 
-        const transactionItem = new TransactionItem({
-            name,
+        const transaction = new Transaction({
+            title,
+            category,
+            dateOfCreation: new Date(),
+            lastUpdate: new Date(),
             budget,
-            amountAchieved,
-            profileId: profile._id,
+            image,
+            transactionsHistorique: [],
         });
 
-        await transactionItem.save();
+        await transaction.save();
 
-        profile.transactionItems.push(transactionItem._id);
+        profile.transactionItems.push(transaction._id);
         await profile.save();
 
-        res.status(201).json(transactionItem);
+        res.status(201).json(transaction);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
 };
 
-// Delete a transaction item
-export const deleteTransactionItem = async (req, res) => {
-    try {
-        const transactionItemId = req.params.id;
-        // Use findByIdAndDelete instead of drop
-        const result = await TransactionItem.findByIdAndDelete(transactionItemId);
-
-        if (!result) {
-            return res.status(404).json({ msg: 'Transaction item not found' });
-        }
-
-        res.json({ msg: 'Transaction item removed' });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-};
-
-
-// Update a transaction item
-export const updateTransactionItem = async (req, res) => {
+// Add a new transaction history item
+export const addTransactionHistoryItem = async (req, res) => {
     handleValidationErrors(req, res);
 
-    const { name, budget, amountAchieved } = req.body;
-    const updatedFields = { name, budget, amountAchieved };
+    const { transactionId } = req.params;
+    const { amount, date, description } = req.body;
 
     try {
-        let transactionItem = await TransactionItem.findById(req.params.id);
+        const transaction = await Transaction.findById(transactionId);
 
-        if (!transactionItem) {
-            return res.status(404).json({ msg: 'Transaction item not found' });
+        if (!transaction) {
+            return res.status(404).json({ msg: 'Transaction not found' });
         }
 
-        transactionItem = await TransactionItem.findByIdAndUpdate(
+        transaction.transactionsHistorique.push({ amount, date, description });
+        transaction.lastUpdate = new Date();
+        await transaction.save();
+
+        res.status(201).json(transaction);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+// Edit a transaction history item
+export const editTransactionHistoryItem = async (req, res) => {
+    handleValidationErrors(req, res);
+
+    const { transactionId, historyItemId } = req.params;
+    const { amount, date, description } = req.body;
+
+    try {
+        const transaction = await Transaction.findById(transactionId);
+
+        if (!transaction) {
+            return res.status(404).json({ msg: 'Transaction not found' });
+        }
+
+        const historyItem = transaction.transactionsHistorique.id(historyItemId);
+
+        if (!historyItem) {
+            return res.status(404).json({ msg: 'Transaction history item not found' });
+        }
+
+        historyItem.amount = amount;
+        historyItem.date = date;
+        historyItem.description = description;
+        transaction.lastUpdate = new Date();
+        await transaction.save();
+
+        res.json(transaction);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+// Get all transactions for the logged-in user
+export const getAllTransactions = async (req, res) => {
+    const { id: userId } = req.user;
+    try {
+        const profile = await findProfileByUserId(userId);
+        if (!profile) {
+            return res.status(404).json({ msg: 'Profile not found' });
+        }
+
+        const transactions = await Transaction.find({ _id: { $in: profile.transactionItems } });
+        res.json(transactions);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+// Get transactions by date for the logged-in user
+export const getTransactionsByDate = async (req, res) => {
+    const { startDate, endDate } = req.query;
+    const { id: userId } = req.user;
+
+    try {
+        const profile = await findProfileByUserId(userId);
+        if (!profile) {
+            return res.status(404).json({ msg: 'Profile not found' });
+        }
+
+        const transactions = await Transaction.find({
+            _id: { $in: profile.transactionItems },
+            dateOfCreation: { $gte: new Date(startDate), $lte: new Date(endDate) },
+        });
+
+        res.json(transactions);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+// Update a transaction
+export const updateTransaction = async (req, res) => {
+    handleValidationErrors(req, res);
+
+    const { title, category, budget, image } = req.body;
+    const updatedFields = { title, category, budget, image, lastUpdate: new Date() };
+
+    try {
+        let transaction = await Transaction.findById(req.params.id);
+
+        if (!transaction) {
+            return res.status(404).json({ msg: 'Transaction not found' });
+        }
+
+        transaction = await Transaction.findByIdAndUpdate(
             req.params.id,
             { $set: updatedFields },
             { new: true }
         );
 
-        res.json(transactionItem);
+        res.json(transaction);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
 };
 
-// Get all transaction items for a profile
-export const getAllTransactionItems = async (req, res) => {
+// Delete a transaction
+export const deleteTransaction = async (req, res) => {
     try {
-        const transactionItems = await TransactionItem.find({ profileId: req.params.profileId });
-        res.json(transactionItems);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-};
+        const transactionId = req.params.id;
+        const result = await Transaction.findByIdAndDelete(transactionId);
 
-// Get transaction items by date range
-export const getTransactionItemsByDate = async (req, res) => {
-    const { startDate, endDate } = req.query;
+        if (!result) {
+            return res.status(404).json({ msg: 'Transaction not found' });
+        }
 
-    try {
-        const transactionItems = await TransactionItem.find({
-            profileId: req.params.profileId,
-            dateCreated: { $gte: new Date(startDate), $lte: new Date(endDate) },
-        });
-
-        res.json(transactionItems);
+        res.json({ msg: 'Transaction removed' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

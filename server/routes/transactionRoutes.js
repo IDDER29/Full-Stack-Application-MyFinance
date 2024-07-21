@@ -1,29 +1,25 @@
 import express from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import {
-    addTransactionItem,
-    deleteTransactionItem,
-    updateTransactionItem,
-    getAllTransactionItems,
-    getTransactionItemsByDate
+    addTransaction,
+    addTransactionHistoryItem,
+    editTransactionHistoryItem,
+    deleteTransaction,
+    updateTransaction,
+    getAllTransactions,
+    getTransactionsByDate
 } from '../controllers/transactionController.js';
-import { validateTransactionItem } from '../validators/transactionValidator.js';
-import { validationResult } from 'express-validator';
+import { validateTransaction, validateTransactionHistoryItem } from '../validators/transactionValidator.js';
+import handleValidationErrors from '../middleware/handleValidationErrors.js';
 
 const router = express.Router();
 
-const validateRequest = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-};
-
-router.post('/add', requireAuth, validateTransactionItem, validateRequest, addTransactionItem);
-router.delete('/:id', requireAuth, deleteTransactionItem);
-router.put('/:id', requireAuth, validateTransactionItem, validateRequest, updateTransactionItem);
-router.get('/:profileId', requireAuth, getAllTransactionItems);
-router.get('/:profileId/date', requireAuth, getTransactionItemsByDate);
+router.post('/add', requireAuth, validateTransaction, handleValidationErrors, addTransaction);
+router.post('/:transactionId/history', requireAuth, validateTransactionHistoryItem, handleValidationErrors, addTransactionHistoryItem);
+router.put('/:transactionId/history/:historyItemId', requireAuth, validateTransactionHistoryItem, handleValidationErrors, editTransactionHistoryItem);
+router.delete('/:id', requireAuth, deleteTransaction);
+router.put('/:id', requireAuth, validateTransaction, handleValidationErrors, updateTransaction);
+router.get('/', requireAuth, getAllTransactions);
+router.get('/date', requireAuth, getTransactionsByDate);
 
 export default router;
