@@ -28,7 +28,7 @@ const NavbarA = () => {
         </Link>
       </nav>
       <div className="mt-auto">
-        <Link to="/" className="text-white flex flex-col items-center" onClick={logout}>
+        <Link to="/" className="text-white flex flex-col items-center" onClick={logout}> 
           <FaSignOutAlt size={24} />
           <span className="text-sm mt-2">Logout</span>
         </Link>
