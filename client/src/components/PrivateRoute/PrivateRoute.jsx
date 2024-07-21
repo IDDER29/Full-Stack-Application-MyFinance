@@ -18,9 +18,6 @@ const PrivateRoute = ({ Component }) => {
                         }
                     });
                     setIsAuth(true);
-                    console.log(isAuth);
-                    navigate("/home")
-
                 } catch (error) {
                     console.error('Error validating token:', error.response ? error.response.status : error.message);
                     setIsAuth(false);
