@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { HomeContext, useHomeContext } from "../../contexts/HomeContext";
+import { useHomeContext } from "../../contexts/HomeContext";
 
 const Card = () => {
   const { profile } = useHomeContext();
