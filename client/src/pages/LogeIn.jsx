@@ -17,7 +17,8 @@ const FormLogin = () => {
         "http://localhost:8088/api/auth/login",
         data
       );
-      localStorage.setItem("token", JSON.stringify(res.data.message));
+
+      localStorage.setItem("token", JSON.stringify(res.data.token));
       navigate("/home");
     } catch (error) {
       console.log(error);
