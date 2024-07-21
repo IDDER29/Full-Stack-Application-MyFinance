@@ -7,7 +7,7 @@ const MonthChart = () => {
   const montant = transactions.map((transaction) => transaction.consumption);
   console.log(montant);
   const totalConsumation = montant.reduce((a, b) => a + b, 0);
-  const soldeRestant = profile.totalIncome - totalConsumation;
+  const soldeRestant = profile.currentTotalIncome - totalConsumation;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg mb-6">

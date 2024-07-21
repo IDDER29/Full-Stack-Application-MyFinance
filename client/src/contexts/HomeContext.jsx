@@ -1,5 +1,9 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useMemo } from "react";
 import { FaBell, FaShoppingCart, FaBolt, FaHome, FaCar } from "react-icons/fa";
+import {
+  fetchProfileData,
+  fetchTransactionsData,
+} from "../services/dataService";
 
 // Create the HomeContext
 export const HomeContext = createContext();
@@ -31,75 +35,10 @@ const BG_COLOR_CLASS_MAP = {
   Autres: "bg-gray-500",
 };
 
-// Sample profile data
-const INITIAL_PROFILE = {
-  firstName: "Idder",
-  lastName: "AIT EL MOUDEN",
-  totalIncome: "9000",
-  goalAmount: "10000",
-};
-
-// Initial transactions data
-const INITIAL_TRANSACTIONS = [
-  {
-    category: "Utilitaires",
-    consumption: 339,
-    budget: 500,
-    dateOfCreation: "01/07/2024",
-    lastUpdate: "11/07/2024",
-    title: "Utility Bill",
-    image: null,
-  },
-  {
-    category: "Logement",
-    consumption: 500,
-    budget: 900,
-    dateOfCreation: "01/07/2024",
-    lastUpdate: "10/07/2024",
-    title: "Housing Rent",
-    image: null,
-  },
-  {
-    category: "Alimentation",
-    consumption: 50,
-    budget: 700,
-    dateOfCreation: "01/07/2024",
-    lastUpdate: "15/07/2024",
-    title: "Groceries",
-    image: null,
-  },
-  {
-    category: "Logement",
-    consumption: 1000,
-    budget: 900,
-    dateOfCreation: "01/07/2024",
-    lastUpdate: "10/07/2024",
-    title: "Housing Rent",
-    image: null,
-  },
-  {
-    category: "Transport",
-    consumption: 239,
-    budget: 600,
-    dateOfCreation: "01/07/2024",
-    lastUpdate: "20/07/2024",
-    title: "Transportation",
-    image: null,
-  },
-  {
-    category: "Utilitaires",
-    consumption: 100,
-    budget: 500,
-    dateOfCreation: "01/07/2024",
-    lastUpdate: "01/07/2024",
-    title: "Utility Bill",
-    image: null,
-  },
-];
-
 export function HomeProvider({ children }) {
-  const [profile] = useState(INITIAL_PROFILE);
-  const [transactions, setTransactions] = useState(INITIAL_TRANSACTIONS);
+  const profile = useMemo(fetchProfileData, []);
+  const [transactions, setTransactions] = useState(fetchTransactionsData());
+
   const [historicTransactions, setHistoricTransactions] = useState([]);
   const [currentTransaction, setCurrentTransaction] = useState(null);
 

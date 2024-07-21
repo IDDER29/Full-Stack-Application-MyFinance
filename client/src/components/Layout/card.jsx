@@ -1,4 +1,6 @@
 import React, { useContext } from "react";
+//import { useHomeContext } from "../../contexts/HomeContext";
+import { useDashboardContext } from "../../contexts/DashboardContext";
 import { useHomeContext } from "../../contexts/HomeContext";
 
 const Card = () => {
@@ -11,7 +13,9 @@ const Card = () => {
       <div className="text-gray-700 mt-2">
         {profile.firstName + " " + profile.lastName}
       </div>
-      <div className="text-2xl font-bold mt-4">{profile.totalIncome}</div>
+      <div className="text-2xl font-bold mt-4">
+        {profile.currentTotalIncome}
+      </div>
     </div>
   );
 };
