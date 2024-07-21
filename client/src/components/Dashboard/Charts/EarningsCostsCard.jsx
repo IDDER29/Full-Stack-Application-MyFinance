@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import EarningsCostsChart from "./EarningsCostsChart";
-import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const EarningsCostsCard = () => {
   const [showEarnings, setShowEarnings] = useState(true);

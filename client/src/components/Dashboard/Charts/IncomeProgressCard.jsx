@@ -1,8 +1,5 @@
 import React, { useContext } from "react";
-import {
-  DashboardContext,
-  useDashboardContext,
-} from "../../../contexts/DashboardContext";
+import { useDashboardContext } from "../../../contexts/DashboardContext";
 
 const IncomeProgressCard = () => {
   const { income, goalIncome } = useDashboardContext();

@@ -15,20 +15,20 @@ const customTooltip = ({ active, payload }) => {
 };
 
 const IncomeSourcesChart = () => {
-  const { soursesOfIncome, colors } = useDashboardContext();
+  const { sourcesOfIncome, colors } = useDashboardContext();
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
         <Pie
           dataKey="amount"
-          data={soursesOfIncome}
+          data={sourcesOfIncome}
           cx="50%"
           cy="50%"
           outerRadius={100}
           fill="#8884d8"
           label
         >
-          {soursesOfIncome.map((entry, index) => (
+          {sourcesOfIncome.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
           ))}
         </Pie>
