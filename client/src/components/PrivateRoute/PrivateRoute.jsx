@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const PrivateRoute = ({ Component }) => {
     const [isAuth, setIsAuth] = useState(true)
     const location = useLocation();
-    const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuth = async () => {
