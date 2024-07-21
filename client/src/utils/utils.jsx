@@ -1,8 +1,30 @@
 import { parse } from "date-fns";
 import { FaBell, FaShoppingCart, FaBolt, FaHome, FaCar } from "react-icons/fa";
 
-export const calculateTotalCosts = (transactions) =>
-  transactions.reduce((acc, { consumption }) => acc + consumption, 0);
+// Function to parse the date in "dd/MM/yyyy" format
+const parseDate = (dateString) => {
+  const [day, month, year] = dateString.split("/").map(Number);
+  return new Date(year, month - 1, day);
+};
+
+// Function to calculate total costs for the given month and year
+export const calculateTotalCosts = (transactions, month, year) => {
+  const currentMonthTransactions = transactions
+    .flatMap((transaction) =>
+      transaction.transactions
+        ? transaction.transactions
+        : transaction.transactionsHistorique
+    )
+    .filter(({ date }) => {
+      const transactionDate = parseDate(date);
+      return (
+        transactionDate.getMonth() + 1 === month &&
+        transactionDate.getFullYear() === year
+      );
+    });
+
+  return currentMonthTransactions.reduce((acc, { amount }) => acc + amount, 0);
+};
 
 export const getExpenseData = (transactions, profile) => {
   const colors = {
@@ -60,47 +82,42 @@ export const getExpenseData = (transactions, profile) => {
   return expenseData;
 };
 
-export const transformDataByMonth = (transactions) => {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+export const transformDataByCategory = (transactions) => {
+  const categories = [
+    "Utilitaires",
+    "Alimentation",
+    "Logement",
+    "Transport",
+    "Autres",
+    "Economiser",
   ];
 
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based, so add 1
+  const currentYear = currentDate.getFullYear();
+
   const expenseData = transactions.reduce((acc, transaction) => {
-    const parsedDate = parse(
-      transaction.dateOfCreation,
-      "dd/MM/yyyy",
-      new Date()
-    );
-    const monthName = months[parsedDate.getMonth()];
+    const category = categories.includes(transaction.category)
+      ? transaction.category
+      : "Autres";
+    const transactionsList =
+      transaction.transactions || transaction.transactionsHistorique;
 
-    if (!acc[monthName]) {
-      acc[monthName] = {
-        month: monthName,
-        Utilitaires: 0,
-        Alimentation: 0,
-        Logement: 0,
-        Transport: 0,
-        Autres: 0,
-        Economiser: 0,
-      };
-    }
-
-    if (transaction.category in acc[monthName]) {
-      acc[monthName][transaction.category] += transaction.consumption;
-    } else {
-      acc[monthName].Autres += transaction.consumption;
-    }
+    transactionsList.forEach(({ amount, date }) => {
+      const transactionDate = parseDate(date);
+      if (
+        transactionDate.getMonth() + 1 === currentMonth &&
+        transactionDate.getFullYear() === currentYear
+      ) {
+        if (!acc[category]) {
+          acc[category] = {
+            category,
+            amount: 0,
+          };
+        }
+        acc[category].amount += amount;
+      }
+    });
 
     return acc;
   }, {});
@@ -131,16 +148,19 @@ export const generateChartData = (transactions, profile) => {
     return acc;
   }, {});
 
-  const costsByMonth = transactions.reduce(
-    (acc, { dateOfCreation, consumption }) => {
-      const parsedDate = parse(dateOfCreation, "dd/MM/yyyy", new Date());
+  const costsByMonth = transactions.reduce((acc, transaction) => {
+    const transactionsList =
+      transaction.transactions || transaction.transactionsHistorique;
+
+    transactionsList.forEach(({ amount, date }) => {
+      const parsedDate = parseDate(date);
       const monthName = months[parsedDate.getMonth()];
 
-      acc[monthName] = (acc[monthName] || 0) + consumption;
-      return acc;
-    },
-    {}
-  );
+      acc[monthName] = (acc[monthName] || 0) + amount;
+    });
+
+    return acc;
+  }, {});
 
   return months.map((month) => ({
     month,

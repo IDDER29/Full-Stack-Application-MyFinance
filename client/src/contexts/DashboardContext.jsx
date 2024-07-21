@@ -6,7 +6,7 @@ import {
 import {
   calculateTotalCosts,
   getExpenseData,
-  transformDataByMonth,
+  transformDataByCategory,
   generateChartData,
 } from "../utils/utils";
 
@@ -26,8 +26,11 @@ export const DashboardProvider = ({ children }) => {
   const profile = useMemo(fetchProfileData, []);
   const [transactions, setTransactions] = useState(fetchTransactionsData());
 
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based, so add 1
+  const currentYear = currentDate.getFullYear();
   const totalCosts = useMemo(
-    () => calculateTotalCosts(transactions),
+    () => calculateTotalCosts(transactions, currentMonth, currentYear),
     [transactions]
   );
   const remainingAmount = useMemo(
@@ -38,8 +41,8 @@ export const DashboardProvider = ({ children }) => {
     () => getExpenseData(transactions, profile),
     [transactions, profile]
   );
-  const expenseDataByMonth = useMemo(
-    () => transformDataByMonth(transactions),
+  const expenseDataByCategory = useMemo(
+    () => transformDataByCategory(transactions),
     [transactions]
   );
   const chartData = useMemo(
@@ -62,7 +65,7 @@ export const DashboardProvider = ({ children }) => {
         expenseData,
         totalAmount: profile.currentTotalIncome,
         goalAmount: profile.goalAmount,
-        expenseDataByMonth,
+        expenseDataByCategory,
         sourcesOfIncome: profile.incomeSourses,
         chartData,
         colors,

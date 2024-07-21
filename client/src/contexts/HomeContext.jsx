@@ -34,10 +34,26 @@ const BG_COLOR_CLASS_MAP = {
   Transport: "bg-red-500",
   Autres: "bg-gray-500",
 };
-
+const parseDate = (dateString) => {
+  const [day, month, year] = dateString.split("/").map(Number);
+  return new Date(year, month - 1, day);
+};
+const currentDate = new Date();
+const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based, so add 1
+const currentYear = currentDate.getFullYear();
 export function HomeProvider({ children }) {
   const profile = useMemo(fetchProfileData, []);
   const [transactions, setTransactions] = useState(fetchTransactionsData());
+
+  const currentMonthTransactions = transactions.filter(
+    ({ dateOfCreation: date }) => {
+      const transactionDate = parseDate(date);
+      return (
+        transactionDate.getMonth() + 1 === currentMonth &&
+        transactionDate.getFullYear() === currentYear
+      );
+    }
+  );
 
   const [historicTransactions, setHistoricTransactions] = useState([]);
   const [currentTransaction, setCurrentTransaction] = useState(null);
@@ -46,7 +62,7 @@ export function HomeProvider({ children }) {
     <HomeContext.Provider
       value={{
         profile,
-        transactions,
+        transactions: currentMonthTransactions,
         setTransactions,
         currentTransaction,
         setCurrentTransaction,

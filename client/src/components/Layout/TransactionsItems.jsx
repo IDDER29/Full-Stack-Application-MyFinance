@@ -16,7 +16,11 @@ const TransactionItem = ({ transaction, open, setOpen }) => {
     currentTransaction,
     setCurrentTransaction,
   } = useHomeContext();
-  const { category, budget, consumption, lastUpdate, title } = transaction;
+  const { title, category, budget, lastUpdate } = transaction;
+  const consumption = transaction.transactionsHistorique.reduce(
+    (acc, { amount }) => acc + amount,
+    0
+  );
   const bgColorClass = bgColorClassMap[category];
   const remaining = budget - consumption;
   const filledAmount = budget - remaining;
@@ -44,7 +48,7 @@ const TransactionItem = ({ transaction, open, setOpen }) => {
           <FaSackDollar size={27} />
         </div>
         <div>
-          <div className="relative w-48 h-4 bg-gray-300 rounded">
+          <div className="relative w-48 h-4 bg-gray-300 rounded overflow-hidden">
             <div
               className={`absolute top-0 left-0 h-4 ${
                 bgColorClass ? bgColorClass : "bg-neutral-800"
@@ -70,8 +74,7 @@ const TransactionItem = ({ transaction, open, setOpen }) => {
   );
 };
 
-const TransactionItems = ({ open, setOpen }) => {
-  const { transactions } = useHomeContext();
+const TransactionItems = ({ transactions, open, setOpen }) => {
   return (
     <div>
       {transactions.map((transaction, index) => (

@@ -13,21 +13,41 @@ export default function Modal({ open, setOpen }) {
     setHistoricTransactions,
   } = useHomeContext();
   const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [actionToConfirm, setActionToConfirm] = useState(null); // 'confirm' or 'cancel'
 
   // Function to handle the final confirmation
+  const formatDateToDDMMYYYY = (date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  const currentDate = new Date();
   const handleFinalConfirm = () => {
     const updatedTransactions = transactions.map((transaction) => {
       if (transaction === currentTransaction) {
         setCurrentTransaction(null);
         setHistoricTransactions([
           ...historicTransactions,
-          { ...transaction, transactionAmount: amount },
+          {
+            ...transaction,
+            transactionAmount: amount,
+            description: description,
+          },
         ]);
         return {
           ...transaction,
-          consumption: transaction.consumption + parseInt(amount),
+
+          transactions: [
+            ...transaction.transactionsHistorique,
+            {
+              amount: amount,
+              description: description,
+              date: formatDateToDDMMYYYY(currentDate),
+            },
+          ],
         };
       }
       return transaction;
@@ -66,6 +86,22 @@ export default function Modal({ open, setOpen }) {
                 onChange={(e) => setAmount(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 placeholder="Enter amount"
+              />
+            </div>
+            <div className="mt-4">
+              <label
+                htmlFor="amount"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Description
+              </label>
+              <input
+                id="amount"
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                placeholder="Enter Description EX: Water, Electricity ..."
               />
             </div>
             <div className="mt-4 flex justify-end gap-2">

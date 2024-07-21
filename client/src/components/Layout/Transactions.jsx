@@ -7,7 +7,10 @@ const Transactions = ({ open, setOpen }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const { transactions } = useHomeContext();
 
-  const categories = transactions.map((transaction) => transaction.category);
+  const categories = [
+    "All",
+    ...new Set(transactions.map((transaction) => transaction.category)),
+  ];
 
   const filteredTransactions =
     selectedCategory === "All"

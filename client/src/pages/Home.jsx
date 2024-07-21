@@ -6,7 +6,6 @@ import Transactions from "../components/Layout/Transactions";
 import MonthChart from "../components/Layout/TotalRecu";
 import TransitionHistorique from "../components/Layout/TransitionHistorique";
 import Modal from "../components/Layout/ItemModal";
-import { HomeProvider } from "../contexts/HomeContext";
 
 const HomePage = () => {
   const [open, setOpen] = useState(false);
