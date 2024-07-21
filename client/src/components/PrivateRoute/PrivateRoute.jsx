@@ -1,25 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const PrivateRoute = ({ Component }) => {
-    const [isAuth, setIsAuth] = useState(false);
-    const location = useLocation(); // Get the current location
+    const [isAuth, setIsAuth] = useState(true)
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const checkAuth = () => {
-            const token = localStorage.getItem('token');
+        const checkAuth = async () => {
+            const token = JSON.parse(localStorage.getItem('token'));
             if (token) {
-                setIsAuth(true);
-            }
-            else {
+                try {
+                    const response = await axios.get('http://localhost:8088/api/auth/protected', {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    setIsAuth(true);
+                    console.log(isAuth);
+                    navigate("/home")
+
+                } catch (error) {
+                    console.error('Error validating token:', error.response ? error.response.status : error.message);
+                    setIsAuth(false);
+                }
+            } else {
                 setIsAuth(false);
             }
-        }
-        setLoading(false);
+        };
         checkAuth();
-    }, [location]); // Re-run the effect whenever the location changes
-    
+    }, [location]);
+
+    console.log(isAuth);
+
     return isAuth ? <Component /> : <Navigate to="/login" />;
 };
 

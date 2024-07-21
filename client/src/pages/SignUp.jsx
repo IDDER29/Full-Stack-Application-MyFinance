@@ -11,10 +11,10 @@ const FormRegistration = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-    const res = await axios.post("http://localhost:8088/api/auth/register",data)
-    console.log(res.data); 
-    localStorage.setItem("token",JSON.stringify(res.data.token))
-    };
+    const res = await axios.post("http://localhost:8088/api/auth/register", data);
+    console.log(res.data);
+    localStorage.setItem("token", JSON.stringify(res.data.message))
+  };
 
   return (
     <>
