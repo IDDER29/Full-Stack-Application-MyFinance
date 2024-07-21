@@ -12,16 +12,20 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/signup" element={<FormRegistration />} />
-        <Route path="/login" element={<FormLogin />} />
+        <Route path="/home" element={<PrivateRoute Component={Home} />}></Route>
+        <Route
+          path="/dashboard"
+          element={<PrivateRoute Component={Dashboard} />}
+        ></Route>
+        <Route path="/signup" element={FormRegistration}></Route>
+        <Route path="/login" element={FormLogin}></Route>
 
-        {/* Protected Route */}
+        {/* on of the privet routs */}
         <Route
           path="/profile"
-          element={<PrivateRoute component={ProfileSection} />}
-        />
+          element={<PrivateRoute Component={ProfileSection} />}
+        ></Route>
+        <Route path="/" element={<Landing />}></Route>
 
         <Route path="/" element={<Landing />} />
         <Route path="*" element={<NotFound />} />

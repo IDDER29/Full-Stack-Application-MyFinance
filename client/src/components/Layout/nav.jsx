@@ -14,9 +14,8 @@ const Navbar = () => {
 
     // Array containing navigation items
     const navItems = [
-        { id: 1, text: 'Accuil' },
-        { id: 2, text: 'Login' },
-        { id: 3, text: 'Signup' },
+        { id: 1, text: 'Login' },
+        { id: 2, text: 'Signup' },
     ];
 
     return (
@@ -26,6 +25,7 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <ul className='hidden md:flex'>
+            <Link to="/" className='p-4 hover:bg-[#00df9a] rounded-xl m-2 cursor-pointer duration-300 hover:text-black'> Accuil</Link>
                 {navItems.map(item => (
                     <Link to={"/"+item.text}
                         key={item.id}

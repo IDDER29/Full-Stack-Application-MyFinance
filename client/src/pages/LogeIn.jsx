@@ -1,21 +1,23 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Layout/nav";
+import axios from 'axios';
 const FormLogin = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
-    console.log(data);
-    const res = await axios.post("http://localhost:8088/api/auth/login", data, {
-      headers: {
-        Authorization: `Bearer ${message}`,
-      },
-    });
-    console.log(res.data);
+    try {
+    const res = await axios.post("http://localhost:8088/api/auth/login", data);
     localStorage.setItem("token", JSON.stringify(res.data.message));
+    navigate("/home");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>

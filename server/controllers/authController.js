@@ -71,7 +71,7 @@ export const loginUser = async (req, res) => {
         isAdmin: user.isAdmin,
     };
     try {
-        const token = await setTocken(payload);
+        const token = createtoken(payload);
         res.setHeader("Authorization", `${token}`);
 
         res.status(200).json({ message: token });
