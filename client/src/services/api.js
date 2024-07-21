@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Create an instance of axios
 const api = axios.create({
     baseURL: 'http://localhost:8088/api',
     headers: {
@@ -7,18 +8,19 @@ const api = axios.create({
     },
 });
 
-// Add a request interceptor to include the token in every request
-api.interceptors.request.use(
-    config => {
-        const token = localStorage.getItem('token'); // Assuming you store your token in localStorage
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    error => {
-        return Promise.reject(error);
-    }
-);
+// Function to get authorization headers
+const getAuthHeaders = () => {
+    const token = JSON.parse(localStorage.getItem('token'));
+    return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+// Add interceptors to include auth headers for requests
+api.interceptors.request.use(config => {
+    config.headers = {
+        ...config.headers,
+        ...getAuthHeaders(),
+    };
+    return config;
+}, error => Promise.reject(error));
 
 export default api;

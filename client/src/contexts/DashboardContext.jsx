@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 import {
   fetchProfileData,
   fetchTransactionsData,
@@ -23,30 +29,52 @@ export const useDashboardContext = () => {
 };
 
 export const DashboardProvider = ({ children }) => {
-  const profile = useMemo(fetchProfileData, []);
-  const [transactions, setTransactions] = useState(fetchTransactionsData());
+  const [profile, setProfile] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const profileData = await fetchProfileData();
+        const transactionsData = await fetchTransactionsData();
+        setProfile(profileData);
+        setTransactions(transactionsData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
 
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based, so add 1
+  const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
+
   const totalCosts = useMemo(
     () => calculateTotalCosts(transactions, currentMonth, currentYear),
     [transactions]
   );
+
   const remainingAmount = useMemo(
-    () => profile.currentTotalIncome - totalCosts,
-    [profile.currentTotalIncome, totalCosts]
+    () => (profile ? profile.currentTotalIncome - totalCosts : 0),
+    [profile, totalCosts]
   );
+
   const expenseData = useMemo(
-    () => getExpenseData(transactions, profile),
+    () => (profile ? getExpenseData(transactions, profile) : []),
     [transactions, profile]
   );
+
   const expenseDataByCategory = useMemo(
     () => transformDataByCategory(transactions),
     [transactions]
   );
+
   const chartData = useMemo(
-    () => generateChartData(transactions, profile),
+    () => (profile ? generateChartData(transactions, profile) : []),
     [transactions, profile]
   );
 
@@ -58,17 +86,18 @@ export const DashboardProvider = ({ children }) => {
   return (
     <DashboardContext.Provider
       value={{
-        goalIncome: profile.goalAmount,
+        goalIncome: profile ? profile.goalAmount : 0,
         costs: totalCosts,
-        income: profile.currentTotalIncome,
+        income: profile ? profile.currentTotalIncome : 0,
         remaining: remainingAmount,
         expenseData,
-        totalAmount: profile.currentTotalIncome,
-        goalAmount: profile.goalAmount,
+        totalAmount: profile ? profile.currentTotalIncome : 0,
+        goalAmount: profile ? profile.goalAmount : 0,
         expenseDataByCategory,
-        sourcesOfIncome: profile.incomeSourses,
+        sourcesOfIncome: profile ? profile.incomeSourses : [],
         chartData,
         colors,
+        loading,
       }}
     >
       {children}

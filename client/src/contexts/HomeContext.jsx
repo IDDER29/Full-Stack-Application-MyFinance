@@ -1,9 +1,9 @@
-import { createContext, useContext, useState, useMemo } from "react";
-import { FaBell, FaShoppingCart, FaBolt, FaHome, FaCar } from "react-icons/fa";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import {
   fetchProfileData,
   fetchTransactionsData,
 } from "../services/dataService";
+import { FaBell, FaShoppingCart, FaBolt, FaHome, FaCar } from "react-icons/fa";
 
 // Create the HomeContext
 export const HomeContext = createContext();
@@ -17,7 +17,7 @@ export function useHomeContext() {
   return context;
 }
 
-// Icon mapping by category
+// Icon and background color mapping by category
 const ICON_MAP = {
   Utilitaires: <FaBolt size={24} color="white" />,
   Alimentation: <FaShoppingCart size={24} color="white" />,
@@ -26,7 +26,6 @@ const ICON_MAP = {
   Autres: <FaBell size={24} color="white" />,
 };
 
-// Background color mapping by category
 const BG_COLOR_CLASS_MAP = {
   Utilitaires: "bg-yellow-500",
   Alimentation: "bg-blue-500",
@@ -34,16 +33,38 @@ const BG_COLOR_CLASS_MAP = {
   Transport: "bg-red-500",
   Autres: "bg-gray-500",
 };
+
+// Helper function to parse dates
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split("/").map(Number);
   return new Date(year, month - 1, day);
 };
+
+// Current date utilities
 const currentDate = new Date();
-const currentMonth = currentDate.getMonth() + 1; // getMonth() is zero-based, so add 1
+const currentMonth = currentDate.getMonth() + 1;
 const currentYear = currentDate.getFullYear();
+
 export function HomeProvider({ children }) {
-  const profile = useMemo(fetchProfileData, []);
-  const [transactions, setTransactions] = useState(fetchTransactionsData());
+  const [profile, setProfile] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const profileData = await fetchProfileData();
+        const transactionsData = await fetchTransactionsData();
+        setProfile(profileData);
+        setTransactions(transactionsData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
 
   const currentMonthTransactions = transactions.filter(
     ({ dateOfCreation: date }) => {
@@ -70,6 +91,7 @@ export function HomeProvider({ children }) {
         bgColorClassMap: BG_COLOR_CLASS_MAP,
         historicTransactions,
         setHistoricTransactions,
+        loading,
       }}
     >
       {children}
