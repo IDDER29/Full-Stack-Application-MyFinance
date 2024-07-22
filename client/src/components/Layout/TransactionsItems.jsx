@@ -9,6 +9,16 @@ import {
 import { FaSackDollar } from "react-icons/fa6";
 import { useHomeContext } from "../../contexts/HomeContext";
 
+const formatDate = (isoString) => {
+  const date = new Date(isoString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
 const TransactionItem = ({ transaction, open, setOpen }) => {
   const {
     iconMap,
@@ -17,6 +27,7 @@ const TransactionItem = ({ transaction, open, setOpen }) => {
     setCurrentTransaction,
   } = useHomeContext();
   const { title, category, budget, lastUpdate } = transaction;
+  const lastUpdatedDate = formatDate(lastUpdate);
   const consumption = transaction.transactionsHistorique.reduce(
     (acc, { amount }) => acc + amount,
     0
@@ -39,7 +50,7 @@ const TransactionItem = ({ transaction, open, setOpen }) => {
         <div>
           <div>{title}</div>
           <div className="flex items-center text-sm text-gray-500">
-            <FaCalendarAlt className="mr-1" /> {lastUpdate}
+            <FaCalendarAlt className="mr-1" /> {lastUpdatedDate}
           </div>
         </div>
       </div>

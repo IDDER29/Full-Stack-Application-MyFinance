@@ -11,15 +11,8 @@ import { useHomeContext } from "../../contexts/HomeContext";
 
 const TransactionItem = ({ transaction, onEdit, onDelete }) => {
   const { transactions, iconMap, bgColorClassMap } = useHomeContext();
-  const {
-    category,
-    consumption,
-    budget,
-    title,
-    image,
-    lastUpdate,
-    transactionAmount,
-  } = transaction;
+  const { category, amount, lastUpdate, description: title } = transaction;
+
   const bgColorClass = bgColorClassMap[category];
   const [showMenu, setShowMenu] = useState(false);
 
@@ -66,7 +59,7 @@ const TransactionItem = ({ transaction, onEdit, onDelete }) => {
             </div>
           )}
         </div>
-        <h2>{transactionAmount} Dhs</h2>
+        <h2>{amount} Dhs</h2>
       </div>
     </div>
   );

@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 import {
   fetchProfileData,
   fetchTransactionsData,
@@ -44,8 +50,8 @@ export function HomeProvider({ children }) {
   const [profile, setProfile] = useState({});
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [historicTransactions, setHistoricTransactions] = useState([]);
   const [currentTransaction, setCurrentTransaction] = useState(null);
+  const [historicTransactions, setHistoricTransactions] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -63,9 +69,27 @@ export function HomeProvider({ children }) {
     loadData();
   }, []);
 
+  useEffect(() => {
+    const currentMonthTransactions = transactions.filter(
+      ({ dateOfCreation: date }) => {
+        const transactionDate = new Date(date);
+        return (
+          transactionDate.getMonth() + 1 === currentMonth &&
+          transactionDate.getFullYear() === currentYear
+        );
+      }
+    );
+
+    const newHistoricTransactions = currentMonthTransactions
+      .map((transaction) => transaction.transactionsHistorique)
+      .flat();
+
+    setHistoricTransactions(newHistoricTransactions);
+  }, [transactions]);
+
   const currentMonthTransactions = useMemo(() => {
     return transactions.filter(({ dateOfCreation: date }) => {
-      const transactionDate = parseDate(date);
+      const transactionDate = new Date(date);
       return (
         transactionDate.getMonth() + 1 === currentMonth &&
         transactionDate.getFullYear() === currentYear

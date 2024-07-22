@@ -17,6 +17,7 @@ const TransitionHistorique = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+  console.log("historicTransactions", historicTransactions);
 
   const handleEdit = (transaction) => {
     setCurrentTransaction(transaction);
@@ -34,9 +35,11 @@ const TransitionHistorique = () => {
   };
 
   const handleSaveEdit = (editedTransaction) => {
-    setTransactions(
-      transactions.map((t) =>
-        t === currentTransaction ? editedTransaction : t
+    console.log("i'm saving");
+    console.log("editedTransaction", editedTransaction);
+    setHistoricTransactions(
+      historicTransactions.map((t) =>
+        t._id === currentTransaction._id ? editedTransaction : t
       )
     );
     setShowEditModal(false);

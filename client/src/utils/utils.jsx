@@ -1,11 +1,5 @@
-import { parse } from "date-fns";
+import { parseISO } from "date-fns";
 import { FaBell, FaShoppingCart, FaBolt, FaHome, FaCar } from "react-icons/fa";
-
-// Function to parse the date in "dd/MM/yyyy" format
-const parseDate = (dateString) => {
-  const [day, month, year] = dateString.split("/").map(Number);
-  return new Date(year, month - 1, day);
-};
 
 // Function to calculate total costs for the given month and year
 export const calculateTotalCosts = (transactions, month, year) => {
@@ -16,7 +10,7 @@ export const calculateTotalCosts = (transactions, month, year) => {
         : transaction.transactionsHistorique
     )
     .filter(({ date }) => {
-      const transactionDate = parseDate(date);
+      const transactionDate = parseISO(date);
       return (
         transactionDate.getMonth() + 1 === month &&
         transactionDate.getFullYear() === year
@@ -104,7 +98,7 @@ export const transformDataByCategory = (transactions) => {
       transaction.transactions || transaction.transactionsHistorique;
 
     transactionsList.forEach(({ amount, date }) => {
-      const transactionDate = parseDate(date);
+      const transactionDate = parseISO(date);
       if (
         transactionDate.getMonth() + 1 === currentMonth &&
         transactionDate.getFullYear() === currentYear
@@ -153,7 +147,7 @@ export const generateChartData = (transactions, profile) => {
       transaction.transactions || transaction.transactionsHistorique;
 
     transactionsList.forEach(({ amount, date }) => {
-      const parsedDate = parseDate(date);
+      const parsedDate = parseISO(date);
       const monthName = months[parsedDate.getMonth()];
 
       acc[monthName] = (acc[monthName] || 0) + amount;

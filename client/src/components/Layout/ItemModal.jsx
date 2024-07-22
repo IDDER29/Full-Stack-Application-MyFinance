@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useHomeContext } from "../../contexts/HomeContext";
-import { set } from "react-hook-form";
+import api from "../../services/api";
 
 export default function Modal({ open, setOpen }) {
   const {
@@ -12,49 +12,58 @@ export default function Modal({ open, setOpen }) {
     historicTransactions,
     setHistoricTransactions,
   } = useHomeContext();
+
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [actionToConfirm, setActionToConfirm] = useState(null); // 'confirm' or 'cancel'
 
-  // Function to handle the final confirmation
-  const formatDateToDDMMYYYY = (date) => {
+  const formatDateToYYYYMMDD = (date) => {
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
     const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${year}-${month}-${day}`;
   };
+
   const currentDate = new Date();
-  const handleFinalConfirm = () => {
-    const updatedTransactions = transactions.map((transaction) => {
-      if (transaction === currentTransaction) {
-        setCurrentTransaction(null);
-        setHistoricTransactions([
-          ...historicTransactions,
-          {
-            ...transaction,
-            transactionAmount: amount,
-            description: description,
-          },
-        ]);
-        return {
-          ...transaction,
 
-          transactions: [
-            ...transaction.transactionsHistorique,
-            {
-              amount: amount,
-              description: description,
-              date: formatDateToDDMMYYYY(currentDate),
-            },
-          ],
+  const handleFinalConfirm = async () => {
+    if (actionToConfirm === "confirm" && currentTransaction) {
+      try {
+        const response = await api.post(
+          `/transaction/${currentTransaction._id}/history`,
+          { amount, description, date: formatDateToYYYYMMDD(currentDate) }
+        );
+
+        const updatedTransaction = {
+          ...currentTransaction,
+          transactionAmount: amount,
+          description: description,
         };
-      }
-      return transaction;
-    });
-    setTransactions(updatedTransactions);
 
-    setOpen(false);
+        setHistoricTransactions((prevHistoricTransactions) => [
+          ...prevHistoricTransactions,
+          updatedTransaction,
+        ]);
+
+        setTransactions((prevTransactions) =>
+          prevTransactions.map((transaction) =>
+            transaction._id === currentTransaction._id
+              ? response.data
+              : transaction
+          )
+        );
+
+        setCurrentTransaction(null);
+        setOpen(false);
+      } catch (error) {
+        console.error("Error updating transaction:", error);
+      }
+    } else if (actionToConfirm === "cancel") {
+      setCurrentTransaction(null);
+      setOpen(false);
+    }
+
     setShowConfirmModal(false);
   };
 
@@ -90,13 +99,13 @@ export default function Modal({ open, setOpen }) {
             </div>
             <div className="mt-4">
               <label
-                htmlFor="amount"
+                htmlFor="description"
                 className="block text-sm font-medium text-gray-700"
               >
                 Description
               </label>
               <input
-                id="amount"
+                id="description"
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}

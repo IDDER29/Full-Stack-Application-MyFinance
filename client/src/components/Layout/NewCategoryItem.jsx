@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useHomeContext } from "../../contexts/HomeContext";
+import api from "../../services/api";
 
 const defaultIcon = <CurrencyDollarIcon className="h-6 w-6 text-yellow-500" />;
 
@@ -20,13 +21,13 @@ export default function Example() {
   const { transactions, setTransactions } = useHomeContext();
 
   const [newTransaction, setNewTransaction] = useState({
+    title: "",
     category: "",
-    consumption: 0,
     budget: "",
+    image: "",
+    consumption: 0,
     dateOfCreation: "01/07/2024",
     lastUpdate: "11/07/2024",
-    title: "",
-    image: "",
   });
 
   const [newCategory, setNewCategory] = useState("");
@@ -39,13 +40,19 @@ export default function Example() {
     );
   };
 
-  const handleConfirmAction = () => {
+  const handleConfirmAction = async () => {
     if (actionToConfirm === "add") {
       if (!validateForm()) {
         alert("Please fill in all required fields.");
         return;
       }
-
+      const { title, category, budget, image } = newTransaction;
+      const response = await api.post("/transaction/add", {
+        title,
+        category,
+        budget,
+        image,
+      });
       setTransactions([...transactions, newTransaction]);
       alert(`New transaction created: ${JSON.stringify(newTransaction)}`);
       setShowNewTransactionModal(false);
