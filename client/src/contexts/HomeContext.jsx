@@ -50,11 +50,15 @@ export function HomeProvider({ children }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  console.log("HomeProvider rendered");
   useEffect(() => {
+    console.log("HomeProvider useEffect triggered");
     const loadData = async () => {
       try {
         const profileData = await fetchProfileData();
         const transactionsData = await fetchTransactionsData();
+        console.log("Profile data fetched:", profileData);
+        console.log("Transactions data fetched:", transactionsData);
         setProfile(profileData);
         setTransactions(transactionsData);
       } catch (error) {
@@ -66,15 +70,15 @@ export function HomeProvider({ children }) {
     loadData();
   }, []);
 
-  const currentMonthTransactions = transactions.filter(
-    ({ dateOfCreation: date }) => {
+  const currentMonthTransactions = useMemo(() => {
+    return transactions.filter(({ dateOfCreation: date }) => {
       const transactionDate = parseDate(date);
       return (
         transactionDate.getMonth() + 1 === currentMonth &&
         transactionDate.getFullYear() === currentYear
       );
-    }
-  );
+    });
+  }, [transactions]);
 
   const [historicTransactions, setHistoricTransactions] = useState([]);
   const [currentTransaction, setCurrentTransaction] = useState(null);

@@ -38,7 +38,11 @@ export const DashboardProvider = ({ children }) => {
       try {
         const profileData = await fetchProfileData();
         const transactionsData = await fetchTransactionsData();
-        setProfile(profileData);
+        setProfile(profileData.profile);
+        console.log(
+          "Profile data lllllllllllllllllllllllllllllllllll:",
+          profileData.profile
+        );
         setTransactions(transactionsData);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -94,10 +98,14 @@ export const DashboardProvider = ({ children }) => {
         totalAmount: profile ? profile.currentTotalIncome : 0,
         goalAmount: profile ? profile.goalAmount : 0,
         expenseDataByCategory,
-        sourcesOfIncome: profile ? profile.incomeSourses : [],
+        sourcesOfIncome: profile ? profile.incomeSources : [],
         chartData,
         colors,
         loading,
+        profile,
+        setProfile,
+        transactions,
+        setTransactions,
       }}
     >
       {children}

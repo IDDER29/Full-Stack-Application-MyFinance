@@ -141,7 +141,7 @@ export const generateChartData = (transactions, profile) => {
     "December",
   ];
 
-  const earningsByMonth = profile.incomeSourses.reduce((acc, { amount }) => {
+  const earningsByMonth = profile.incomeSources.reduce((acc, { amount }) => {
     months.forEach((month) => {
       acc[month] = (acc[month] || 0) + amount;
     });
