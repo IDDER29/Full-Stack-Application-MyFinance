@@ -39,10 +39,6 @@ export const DashboardProvider = ({ children }) => {
         const profileData = await fetchProfileData();
         const transactionsData = await fetchTransactionsData();
         setProfile(profileData.profile);
-        console.log(
-          "Profile data lllllllllllllllllllllllllllllllllll:",
-          profileData.profile
-        );
         setTransactions(transactionsData);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -61,27 +57,22 @@ export const DashboardProvider = ({ children }) => {
     () => calculateTotalCosts(transactions, currentMonth, currentYear),
     [transactions]
   );
-
   const remainingAmount = useMemo(
     () => (profile ? profile.currentTotalIncome - totalCosts : 0),
     [profile, totalCosts]
   );
-
   const expenseData = useMemo(
     () => (profile ? getExpenseData(transactions, profile) : []),
     [transactions, profile]
   );
-
   const expenseDataByCategory = useMemo(
     () => transformDataByCategory(transactions),
     [transactions]
   );
-
   const chartData = useMemo(
     () => (profile ? generateChartData(transactions, profile) : []),
     [transactions, profile]
   );
-
   const colors = useMemo(
     () => ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"],
     []

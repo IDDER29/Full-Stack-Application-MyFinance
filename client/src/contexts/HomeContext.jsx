@@ -5,10 +5,8 @@ import {
 } from "../services/dataService";
 import { FaBell, FaShoppingCart, FaBolt, FaHome, FaCar } from "react-icons/fa";
 
-// Create the HomeContext
-export const HomeContext = createContext();
+const HomeContext = createContext();
 
-// Custom hook for using HomeContext
 export function useHomeContext() {
   const context = useContext(HomeContext);
   if (!context) {
@@ -17,7 +15,6 @@ export function useHomeContext() {
   return context;
 }
 
-// Icon and background color mapping by category
 const ICON_MAP = {
   Utilitaires: <FaBolt size={24} color="white" />,
   Alimentation: <FaShoppingCart size={24} color="white" />,
@@ -34,32 +31,28 @@ const BG_COLOR_CLASS_MAP = {
   Autres: "bg-gray-500",
 };
 
-// Helper function to parse dates
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split("/").map(Number);
   return new Date(year, month - 1, day);
 };
 
-// Current date utilities
 const currentDate = new Date();
 const currentMonth = currentDate.getMonth() + 1;
 const currentYear = currentDate.getFullYear();
 
 export function HomeProvider({ children }) {
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState({});
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [historicTransactions, setHistoricTransactions] = useState([]);
+  const [currentTransaction, setCurrentTransaction] = useState(null);
 
-  console.log("HomeProvider rendered");
   useEffect(() => {
-    console.log("HomeProvider useEffect triggered");
     const loadData = async () => {
       try {
         const profileData = await fetchProfileData();
         const transactionsData = await fetchTransactionsData();
-        console.log("Profile data fetched:", profileData);
-        console.log("Transactions data fetched:", transactionsData);
-        setProfile(profileData);
+        setProfile(profileData.profile);
         setTransactions(transactionsData);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -79,9 +72,6 @@ export function HomeProvider({ children }) {
       );
     });
   }, [transactions]);
-
-  const [historicTransactions, setHistoricTransactions] = useState([]);
-  const [currentTransaction, setCurrentTransaction] = useState(null);
 
   return (
     <HomeContext.Provider
