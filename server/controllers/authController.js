@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
 import { Profile } from '../models/Profile.js';
 import createtoken from '../utils/jwt.js';
@@ -25,35 +24,51 @@ export const registerUser = async (req, res) => {
 
     try {
         const userExists = await User.findOne({ email });
+        console.log(userExists);
         if (userExists) {
             return res.status(400).json({ error: 'User already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        console.log("password",hashedPassword);
 
-        const user = new User({
+        // const user = new User({
+        //     name,
+        //     email,
+        //     password: hashedPassword,
+        // });
+
+        const useradded = await User.create({
             name,
             email,
             password: hashedPassword,
         });
-
-        await user.save();
+        // const useradded = await user.save();
+        console.log("user",useradded);
+        
 
         // Create a profile with default values
-        const profile = new Profile({
+        // const profile = new Profile({
+        //     username: name,
+        //     currentTotalIncome: 0,
+        //     goalAmount: 0,
+        //     userId: user._id,
+        // });
+
+        const profileAdded= await Profile.create({
             username: name,
             currentTotalIncome: 0,
             goalAmount: 0,
-            userId: user._id,
+            userId: useradded._id,
         });
-
-        await profile.save();
-
-        const token = await setToken({ id: user._id });
-
+        console.log("profile",profileAdded)
+        // const profileAdded= await profile.save();
+        const token = await createtoken(useradded);
+        console.log("token",token);
+        
         return res.status(201).json({ message: 'User registered successfully', token });
     } catch (err) {
-        console.error(err.message);
+        // console.error(err.message);
         return res.status(500).json({ error: 'Server error' });
     }
 };

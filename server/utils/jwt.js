@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const secrittoken = process.env.Access_token;
 
-const createtoken = (user) => {
+const createtoken = async (user) => {
     const signtoken = jwt.sign({ user }, secrittoken, { expiresIn: "1d" })
     return signtoken;
 }
